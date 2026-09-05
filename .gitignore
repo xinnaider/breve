@@ -2,7 +2,7 @@
 *.swp
 *~
 
-macos/DerivedData/
+macos/DerivedData*/
 macos/*.xcodeproj/xcuserdata/
 macos/*.xcodeproj/project.xcworkspace/xcuserdata/
 *.xcuserstate

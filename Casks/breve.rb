@@ -1,6 +1,6 @@
 cask "breve" do
-  version "1.0.0"
-  sha256 "2be7c123317c6dca7206c13c6bcc6c3528acb44f9d0e88f480899fa04af3c3f9"
+  version "1.0.1"
+  sha256 "7fc618fae16d098b5d1679bc939983cbf8f679eb99a17d1bd83f5a8c5190a3f9"
 
   url "https://github.com/xinnaider/breve/releases/download/v#{version}/Breve.zip",
       verified: "github.com/xinnaider/breve/"

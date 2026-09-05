@@ -10,23 +10,20 @@ O app usa [Sparkle 2.9](https://sparkle-project.org/documentation/) para procura
 
 ## No app
 
-1. Botão direito no pet, menu da barra, ou Configuração → Atualização.
-2. Procurar atualização.
-3. Sem pacote no feed: estado "sem atualização" (canal vazio) ou erro (feed inacessível).
-4. Se houver versão nova: o painel mostra as versões. Instalar e reabrir abre o diálogo do Sparkle. Confirme lá antes de substituir o bundle e reabrir.
+1. Ícone ao lado dos idiomas no cabeçalho, botão direito no pet, ou menu da barra.
+2. O clique abre o diálogo do Sparkle. Sem pacote no feed: estado "sem atualização" (canal vazio) ou erro (feed inacessível).
+3. Se houver versão nova, confirme no Sparkle antes de substituir o bundle e reabrir.
 
-Preferências do usuário (`petzinho.config.v1`) ficam fora do `.app` e sobrevivem a essa troca.
+Preferências do usuário (`breve.config.v1`) ficam fora do `.app` e sobrevivem a essa troca.
 
 ## Homebrew
 
-Não há cask publicado. Quando existir, o cask deve ter `auto_updates true`. Nesse caso:
+O cask `xinnaider/breve/breve` tem `auto_updates true`:
 
-- Instalar via `brew install --cask` coloca o `.app` em Aplicativos.
+- `brew install --cask` coloca o `.app` em Aplicativos.
 - O Sparkle atualiza esse mesmo bundle, com confirmação.
 - `brew upgrade` normal não substitui um cask com `auto_updates true`.
 - `brew upgrade --cask --greedy breve` pode sobrescrever com o artefato do cask.
-
-Sem Developer ID e notarização, um zip de release ainda não é uma distribuição Gatekeeper.
 
 ## Publicar um pacote
 

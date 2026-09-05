@@ -8,7 +8,7 @@ import SwiftUI
 @Observable
 final class Session {
     static let shared = Session()
-    private static let log = Logger(subsystem: "dev.fordevs.petzinho", category: "session")
+    private static let log = Logger(subsystem: "dev.fordevs.breve", category: "session")
 
     var catalog = Catalog(types: [], cards: [])
     var sel: [String: TypeSelection] = [:]
@@ -70,7 +70,7 @@ final class Session {
         apply(UserConfig.load() ?? .empty(types: catalog.types))
         if bootstrapped, canFinish {
             setupVisible = false
-            let debugCard = ProcessInfo.processInfo.environment["PETZINHO_CARD"] != nil
+            let debugCard = DebugEnv.value("CARD") != nil
             pickAndShow(open: debugCard)
             if !debugCard {
                 scheduleAppear()
@@ -395,7 +395,7 @@ final class Session {
     }
 
     private func pickAndShow(open: Bool) {
-        let forcedId = ProcessInfo.processInfo.environment["PETZINHO_CARD"]
+        let forcedId = DebugEnv.value("CARD")
         if let forcedId, let card = catalog.cards.first(where: { $0.id == forcedId }) {
             currentCard = card
             lastShownId = card.id
@@ -410,7 +410,7 @@ final class Session {
         configureDelivery()
         if open {
             setBubbleOpen(true, restartClock: true)
-            if ProcessInfo.processInfo.environment["PETZINHO_DEEP"] == "1", tipKind != .quiz {
+            if DebugEnv.value("DEEP") == "1", tipKind != .quiz {
                 setDeep(true)
             }
         } else {
@@ -430,7 +430,7 @@ final class Session {
             return
         }
         let options = QuizFactory.options(for: card, pool: bag)
-        let forced = ProcessInfo.processInfo.environment["PETZINHO_KIND"]
+        let forced = DebugEnv.value("KIND")
         if forced == "info" {
             tipKind = .info
             quizOptions = []

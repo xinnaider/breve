@@ -2,8 +2,8 @@
 # Interpolation: {name} in the string, pass ["name": value].
 
 menu.swap:
-  pt: Trocar
-  en: Next
+  pt: Próximo conteúdo
+  en: Next item
 menu.settings:
   pt: Configuração
   en: Settings
@@ -215,9 +215,18 @@ load.empty:
   pt: O catálogo YAML veio vazio.
   en: The YAML catalog was empty.
 
-setup.nav.update:
-  pt: Atualização
-  en: Updates
+setup.header.version:
+  pt: "Versão {version}"
+  en: "Version {version}"
+setup.update.icon:
+  pt: Procurar atualização
+  en: Check for updates
+setup.update.icon.available:
+  pt: Instalar atualização
+  en: Install update
+setup.update.icon.checking:
+  pt: Procurando atualização
+  en: Checking for updates
 setup.update.title:
   pt: Atualizações
   en: Updates

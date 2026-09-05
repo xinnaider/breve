@@ -15,13 +15,14 @@ struct UserConfig: Codable, Equatable {
         var topics: [String]
     }
 
-    static let defaultsKey = "petzinho.config.v1"
+    static let defaultsKey = "breve.config.v1"
+    static let legacyDefaultsKey = "petzinho.config.v1"
+    static let legacySuiteName = "dev.fordevs.petzinho"
 
-    // Isolate manual first-launch checks from the student's saved preferences.
     static var storage: UserDefaults {
         #if DEBUG
-        if let suite = ProcessInfo.processInfo.environment["PETZINHO_DEFAULTS_SUITE"],
-           !suite.isEmpty, let defaults = UserDefaults(suiteName: suite) {
+        if let suite = DebugEnv.value("DEFAULTS_SUITE"),
+           let defaults = UserDefaults(suiteName: suite) {
             return defaults
         }
         #endif
@@ -29,8 +30,31 @@ struct UserConfig: Codable, Equatable {
     }
 
     static func load(from defaults: UserDefaults = UserConfig.storage) -> UserConfig? {
-        guard let data = defaults.data(forKey: defaultsKey) else { return nil }
-        return try? JSONDecoder().decode(UserConfig.self, from: data)
+        let legacy: UserDefaults?
+        #if DEBUG
+        if DebugEnv.value("DEFAULTS_SUITE") != nil {
+            legacy = nil
+        } else {
+            legacy = UserDefaults(suiteName: legacySuiteName)
+        }
+        #else
+        legacy = UserDefaults(suiteName: legacySuiteName)
+        #endif
+        return load(from: defaults, legacy: legacy)
+    }
+
+    static func load(from defaults: UserDefaults, legacy: UserDefaults?) -> UserConfig? {
+        if let config = decode(defaults.data(forKey: defaultsKey)) {
+            return config
+        }
+        guard let legacy,
+              let config = decode(
+                legacy.data(forKey: legacyDefaultsKey) ?? legacy.data(forKey: defaultsKey)
+              ) else {
+            return nil
+        }
+        config.save(to: defaults)
+        return config
     }
 
     func save(to defaults: UserDefaults = UserConfig.storage) {
@@ -43,11 +67,31 @@ struct UserConfig: Codable, Equatable {
             bootstrapped: false,
             sel: Dictionary(uniqueKeysWithValues: types.map { ($0.id, Slot(on: false, topics: [])) }),
             lastShownId: nil,
-            dockEdge: DockAnchor.fallback.edge.rawValue,
-            dockAlong: Double(DockAnchor.fallback.along),
+            dockEdge: "right",
+            dockAlong: 0.78,
             learnQuiz: true,
             learnInfo: true,
             language: AppLanguage.fallback.rawValue
         )
+    }
+
+    private static func decode(_ data: Data?) -> UserConfig? {
+        guard let data else { return nil }
+        return try? JSONDecoder().decode(UserConfig.self, from: data)
+    }
+}
+
+enum DebugEnv {
+    static func value(_ name: String) -> String? {
+        #if DEBUG
+        let env = ProcessInfo.processInfo.environment
+        if let value = env["BREVE_\(name)"], !value.isEmpty {
+            return value
+        }
+        if let value = env["PETZINHO_\(name)"], !value.isEmpty {
+            return value
+        }
+        #endif
+        return nil
     }
 }

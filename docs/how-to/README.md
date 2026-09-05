@@ -10,6 +10,7 @@ Receitas para uma tarefa concreta.
 
 ## Documentos
 
+- [Instalar](./instalar.md)
 - [Compilar e abrir](./compilar-e-abrir.md)
 - [Criar uma dica](./criar-dica.md)
 - [Atualizar o Breve](./atualizar.md)

@@ -3,7 +3,7 @@ import os
 import Yams
 
 enum CatalogLoader {
-    private static let log = Logger(subsystem: "dev.fordevs.petzinho", category: "catalog")
+    private static let log = Logger(subsystem: "dev.fordevs.breve", category: "catalog")
 
     enum LoadError: LocalizedError {
         case missingResource(String)

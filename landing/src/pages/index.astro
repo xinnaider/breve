@@ -56,10 +56,10 @@ const repository = 'https://github.com/xinnaider/breve';
     <dialog id="install-modal" aria-labelledby="install-title">
       <button class="modal-close" aria-label="Fechar instalação" autofocus>×</button>
       <p class="eyebrow">Breve no seu Mac</p>
-      <h2 id="install-title">Ainda não há instalador publicado.</h2>
-      <p class="install-last">O Homebrew e o zip de release ainda não existem. O código está no GitHub para quem quiser compilar no Mac.</p>
-      <p class="install-last">Atualizar pelo app (Sparkle) só instala depois da sua confirmação, e só quando houver um pacote no feed.</p>
-      <div class="command-row"><code id="brew-command">cd macos && xcodegen generate && xcodebuild -scheme Petzinho -configuration Debug -derivedDataPath ./DerivedData -destination 'platform=macOS' build</code><button id="copy-command" aria-label="Copiar comando">Copiar</button></div>
+      <h2 id="install-title">Instalar com Homebrew</h2>
+      <p class="install-last">No Terminal, no Mac com macOS 14 ou mais recente e Apple Silicon:</p>
+      <div class="command-row"><code id="brew-command">brew tap xinnaider/breve https://github.com/xinnaider/breve && brew install --cask xinnaider/breve/breve</code><button id="copy-command" aria-label="Copiar comando">Copiar</button></div>
+      <p class="install-last">Atualizar pelo app só instala depois da sua confirmação.</p>
       <p id="copy-status" role="status" aria-live="polite"></p>
       <a class="brew-help" href={repository} target="_blank" rel="noreferrer">Abrir o repositório no GitHub</a>
     </dialog>

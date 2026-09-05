@@ -1,19 +1,12 @@
 # Feed Sparkle
 
-`appcast.xml` é o canal apontado por `SUFeedURL` no `Info.plist`. O canal está vazio de propósito: ainda não há zip de release assinado com EdDSA neste repositório.
+`appcast.xml` é o canal de `SUFeedURL`. O pacote fica no GitHub Release; este arquivo só descreve a versão e a assinatura EdDSA.
 
-Ferramentas: baixe a [release 2.9.x do Sparkle](https://github.com/sparkle-project/Sparkle/releases) e use os binários `generate_keys` e `generate_appcast` do diretório `bin/` do pacote (ou coloque-os no `PATH`).
+Para publicar outra versão:
 
-Quando houver um `Breve.app` de Release que você pretende hospedar:
+1. Suba o `MARKETING_VERSION` / `CURRENT_PROJECT_VERSION` no `macos/project.yml`.
+2. `scripts/package-macos.sh` gera o zip de Release.
+3. `generate_appcast --account breve --download-url-prefix https://github.com/xinnaider/breve/releases/download/vX.Y.Z/ /caminho/do/dir-com-o-zip`
+4. Copie o `appcast.xml` gerado para `updates/`, ajuste o cask (`version` e `sha256`) e crie o GitHub Release com o mesmo zip.
 
-```bash
-ditto -c -k --sequesterRsrc --keepParent \
-  macos/DerivedData/Build/Products/Release/Breve.app \
-  updates/Breve.zip
-
-generate_appcast --account breve updates/
-```
-
-O `generate_appcast` preenche `sparkle:edSignature` e o `enclosure`. Sem Developer ID e notarização o arquivo ainda pode ser assinado no Sparkle, mas o Gatekeeper pode bloquear a instalação em outras máquinas.
-
-Não coloque a chave privada neste diretório. A pública fica em `Info.plist` (`SUPublicEDKey`). A privada deve permanecer no Keychain da conta `breve`.
+A chave privada fica no Keychain (`--account breve`). Não a grave neste repositório. A pública é `SUPublicEDKey` no `Info.plist`.

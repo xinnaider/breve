@@ -18,8 +18,8 @@ Consulta pontual.
 
 | Item | Valor |
 |---|---|
-| Bundle | `dev.fordevs.petzinho` |
-| UserDefaults | `petzinho.config.v1` |
+| Bundle | `dev.fordevs.breve` |
+| UserDefaults | `breve.config.v1` |
 | Hide do balão | 10s (pausa com hover) |
 | Próxima dica | 30 min × (1 ± 20%) |
 | Face do pet | 56 pt |

@@ -1,18 +1,33 @@
 #!/usr/bin/env bash
-# Empacota Breve.app em zip para um futuro appcast Sparkle.
-# Nao assina Developer ID nem notoriza. Nao publique como instalador de usuario
-# ate existir identidade Apple e um enclosure EdDSA no appcast.
+# Empacota Breve.app (Release) em zip para GitHub Release e generate_appcast.
+# Assinatura Apple Developer ID / notarização não entram neste passo.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT/macos"
 xcodegen generate
-xcodebuild -scheme Petzinho -configuration Release -derivedDataPath ./DerivedData -destination 'platform=macOS' build
+xcodebuild -scheme Breve -configuration Release -derivedDataPath ./DerivedData -destination 'platform=macOS' build
 APP="$ROOT/macos/DerivedData/Build/Products/Release/Breve.app"
-OUT="$ROOT/updates/Breve.zip"
-mkdir -p "$ROOT/updates"
+OUT="${1:-$ROOT/updates/Breve.zip}"
+mkdir -p "$(dirname "$OUT")"
 rm -f "$OUT"
 ditto -c -k --sequesterRsrc --keepParent "$APP" "$OUT"
+python3 - "$APP" "$OUT" <<'PY'
+import os, sys
+from pathlib import Path
+app, zip_path = map(Path, sys.argv[1:])
+home = os.environ["HOME"].encode()
+hits = []
+for path in app.rglob("*"):
+    if path.is_file() and home in path.read_bytes():
+        hits.append(str(path.relative_to(app)))
+if home in zip_path.read_bytes():
+    hits.append(str(zip_path))
+if hits:
+    print("pacote contém o HOME desta máquina:", *hits, sep="\n")
+    sys.exit(1)
+print("auditoria de caminho local: ok")
+PY
 echo "zip: $OUT"
 ls -lh "$OUT"
-echo "Proximo passo (local, Keychain --account breve): generate_appcast updates/"
-echo "Nao rode generate_appcast sem o zip final que voce pretende hospedar."
+shasum -a 256 "$OUT"
+echo "Gere o appcast fora deste git; não commite o zip nem a chave EdDSA."

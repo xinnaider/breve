@@ -62,7 +62,7 @@ final class WidgetPanelController {
         panel.isExcludedFromWindowsMenu = true
         panel.contentView = view
         panel.animationBehavior = .none
-        panel.sharingType = .none
+        panel.sharingType = .readOnly
         panel.worksWhenModal = true
 
         self.panel = panel
@@ -588,12 +588,7 @@ private final class PetMenuTarget: NSObject {
     }
 
     @objc func update() {
-        let updater = AppUpdater.shared
-        if case .available = updater.status {
-            updater.present()
-        } else {
-            updater.probe()
-        }
+        AppUpdater.shared.present()
     }
 
     @objc func langPT() {

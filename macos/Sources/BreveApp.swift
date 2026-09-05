@@ -3,7 +3,7 @@ import Sparkle
 import SwiftUI
 
 @main
-struct PetzinhoApp: App {
+struct BreveApp: App {
     @NSApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
 
     var body: some Scene {
@@ -39,7 +39,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             AppUpdater.shared.attach(updater)
         }
         #if DEBUG
-        if ProcessInfo.processInfo.environment["PETZINHO_SPARKLE_CHECK"] == "1" {
+        if DebugEnv.value("SPARKLE_CHECK") == "1" {
             Task { @MainActor in
                 try? await Task.sleep(for: .seconds(1.5))
                 AppUpdater.shared.present()
@@ -72,11 +72,7 @@ private struct StatusMenu: View {
         }
         .keyboardShortcut(",", modifiers: .command)
         Button(updater.menuTitle(t: { session.t($0) })) {
-            if case .available = updater.status {
-                updater.present()
-            } else {
-                updater.probe()
-            }
+            updater.present()
         }
         .disabled(!updater.canCheck)
         Divider()

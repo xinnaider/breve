@@ -96,11 +96,8 @@ struct SetupView: View {
     @State private var settingsStep = 0
     @State private var query = ""
     @State private var completed = false
-    @State private var confirmInstall = false
     @State private var contentHeight: CGFloat = 420
-    private var sections: [String] {
-        isSettings ? ["learn", "types", "topics", "update"] : ["learn", "types", "topics"]
-    }
+    private var sections: [String] { ["learn", "types", "topics"] }
     private var isSettings: Bool { session.setupPage == .settings }
     private var step: Int {
         if isSettings { return settingsStep }
@@ -132,8 +129,7 @@ struct SetupView: View {
                     switch step {
                     case 0: learning
                     case 1: themes
-                    case 2: categories
-                    default: updates
+                    default: categories
                     }
                     footer
                 }
@@ -188,12 +184,90 @@ struct SetupView: View {
                 .accessibilityHidden(true)
             Text("Breve")
                 .font(.system(size: 17, weight: .semibold))
+            Text(session.t("setup.header.version", ["version": updater.currentVersion]))
+                .font(.system(size: 13, weight: .medium))
+                .foregroundStyle(Theme.muted)
+                .accessibilityLabel(session.t("setup.update.current", [
+                    "version": updater.currentVersion,
+                    "build": updater.currentBuild
+                ]))
             Spacer()
+            updateButton
             languageFlag("🇧🇷", language: .pt, label: "lang.pt")
             languageFlag("🇺🇸", language: .en, label: "lang.en")
         }
         .padding(.horizontal, 24)
         .padding(.top, 28)
+    }
+
+    private var updateButton: some View {
+        let checking = updater.status == .checking
+        return Button {
+            updater.present()
+        } label: {
+            ZStack {
+                if checking {
+                    ProgressView()
+                        .controlSize(.small)
+                } else {
+                    Image(systemName: updateSymbol)
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundStyle(updateTint)
+                }
+            }
+            .frame(width: 42, height: 34)
+            .background(updateBackground, in: RoundedRectangle(cornerRadius: 8))
+            .overlay(RoundedRectangle(cornerRadius: 8)
+                .strokeBorder(updateBorder))
+        }
+        .buttonStyle(.plain)
+        .disabled(!updater.canCheck)
+        .help(updateHelp)
+        .accessibilityLabel(updateHelp)
+        .accessibilityValue(updateStatusText)
+        .accessibilityHint(session.t("setup.update.confirm"))
+    }
+
+    private var updateSymbol: String {
+        switch updater.status {
+        case .available: "arrow.down.circle.fill"
+        case .error: "exclamationmark.circle"
+        case .upToDate: "checkmark.circle"
+        case .idle, .checking: "arrow.clockwise"
+        }
+    }
+
+    private var updateTint: Color {
+        switch updater.status {
+        case .available: setupAccent
+        case .error: .orange
+        case .upToDate: Theme.muted
+        case .idle, .checking: Theme.text
+        }
+    }
+
+    private var updateBackground: Color {
+        switch updater.status {
+        case .available: setupAccent.opacity(0.12)
+        case .error: Color.orange.opacity(0.12)
+        default: Color.white.opacity(0.035)
+        }
+    }
+
+    private var updateBorder: Color {
+        switch updater.status {
+        case .available: setupAccent.opacity(0.8)
+        case .error: Color.orange.opacity(0.7)
+        default: .clear
+        }
+    }
+
+    private var updateHelp: String {
+        switch updater.status {
+        case .available: session.t("setup.update.icon.available")
+        case .checking: session.t("setup.update.icon.checking")
+        default: session.t("setup.update.icon")
+        }
     }
 
     private var navigation: some View {
@@ -381,47 +455,6 @@ struct SetupView: View {
     private func matches(_ topic: Topic, type: StudyType) -> Bool {
         let text = query.trimmingCharacters(in: .whitespacesAndNewlines)
         return text.isEmpty || topic.label.localizedStandardContains(text) || type.label.localizedStandardContains(text)
-    }
-
-    private var updates: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text(session.t("setup.update.current", [
-                "version": updater.currentVersion,
-                "build": updater.currentBuild
-            ]))
-            .font(.system(size: 13))
-            .foregroundStyle(Theme.muted)
-            Text(updateStatusText)
-                .font(.system(size: 14))
-                .fixedSize(horizontal: false, vertical: true)
-            Text(session.t("setup.update.confirm"))
-                .font(.system(size: 12))
-                .foregroundStyle(Theme.muted)
-            Text(session.t("setup.update.brew"))
-                .font(.system(size: 12))
-                .foregroundStyle(Theme.muted)
-            HStack(spacing: 10) {
-                Button(session.t("setup.update.check")) {
-                    updater.probe()
-                }
-                .disabled(!updater.canCheck)
-                if case .available = updater.status {
-                    Button(session.t("setup.update.install")) {
-                        confirmInstall = true
-                    }
-                    .buttonStyle(.borderedProminent)
-                    .disabled(!updater.canCheck)
-                }
-            }
-        }
-        .confirmationDialog(session.t("setup.update.confirm_title"), isPresented: $confirmInstall) {
-            Button(session.t("setup.update.install")) {
-                updater.present()
-            }
-            Button(session.t("setup.cancel"), role: .cancel) {}
-        } message: {
-            Text(session.t("setup.update.confirm"))
-        }
     }
 
     private var updateStatusText: String {

@@ -30,21 +30,21 @@ Session  -->  WidgetPanelController (NSPanel)
 | Session | Recorte, timers, quiz/info, persistência | `macos/Sources/Session.swift` |
 | Overlay | Pet + balão, dock, cursor, drag | `macos/Sources/Widget/` |
 | Setup | Bootstrap e configuração | `macos/Sources/Setup/` |
-| Menu de barra | Trocar, Configuração, atualização, Encerrar | `macos/Sources/PetzinhoApp.swift` |
+| Menu de barra | Próximo conteúdo, Configuração, atualização, Encerrar | `macos/Sources/BreveApp.swift` |
 | Atualizador | Feed Sparkle, diálogo de confirmação | `macos/Sources/AppUpdater.swift` |
 
 ## Fluxos principais
 
 1. Launch: `applicationDidFinishLaunching` liga o panel, carrega YAML, aplica UserDefaults. Sem recorte: setup. Com recorte: pet visível, próxima dica em ~30 min ± 20%.
 2. Dica: `pickNext` no pool (tipo ligado ∩ tópico marcado). Questionário abre pergunta e alternativas; o mais (explicação) só depois da resposta. Informação abre o verso; o mais mostra extras. Balão some em 10s; hover no pet ou no balão pausa o relógio. Pet fica.
-3. Trocar (barra ou botão direito): `forceTip()`, outro card agora.
+3. Próximo conteúdo (barra ou botão direito): `forceTip()`, outro card agora.
 4. Conteúdo novo: editar `content/`, rebuild, conferir o YAML dentro do `.app`.
-5. Atualização: procurar no menu ou em Configuração. Sem pacote no feed, o ciclo termina sem instalar. Com pacote, o Sparkle pede confirmação antes de substituir o bundle.
+5. Atualização: ícone no cabeçalho das configurações, menu do pet ou menu da barra. O clique abre o Sparkle. Sem pacote no feed, o ciclo termina sem instalar. Com pacote, o Sparkle pede confirmação antes de substituir o bundle.
 
 ## Limites e integrações
 
 - SO: macOS 14+. Accessory via `NSApp.setActivationPolicy(.accessory)`.
-- Persistência: `UserDefaults` chave `petzinho.config.v1`.
+- Persistência: `UserDefaults` chave `breve.config.v1`.
 - Dependências: Yams ≥ 6.2.2 (YAML) e Sparkle ≥ 2.9.6 (atualização com confirmação).
 - Sparkle: feed em `updates/appcast.xml`. Sem iCloud, sem extensão de sistema.
 

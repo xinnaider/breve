@@ -5,8 +5,8 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT/macos"
 xcodegen generate
-xcodebuild -scheme Breve -configuration Release -derivedDataPath ./DerivedData -destination 'platform=macOS' build
-APP="$ROOT/macos/DerivedData/Build/Products/Release/Breve.app"
+xcodebuild -scheme Breve -configuration Release -derivedDataPath ./DerivedData.noindex -destination 'platform=macOS' build
+APP="$ROOT/macos/DerivedData.noindex/Build/Products/Release/Breve.app"
 OUT="${1:-$ROOT/updates/Breve.zip}"
 mkdir -p "$(dirname "$OUT")"
 rm -f "$OUT"

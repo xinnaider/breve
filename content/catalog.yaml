@@ -1,0 +1,43 @@
+# Catálogo do Breve
+# Tipos sem source, ou com available: false, ficam cinza.
+# Conteúdo de produção: development.pt.yaml e development.en.yaml
+# Fontes pedagógicas: content/SOURCES.md
+
+version: 1
+
+types:
+  - id: development
+    label: Programação
+    labels:
+      pt: Programação
+      en: Programming
+    tone: blue
+    available: true
+    source: development.pt.yaml
+    sources:
+      pt: development.pt.yaml
+      en: development.en.yaml
+
+  - id: marketing
+    label: Marketing
+    labels:
+      pt: Marketing
+      en: Marketing
+    tone: amber
+    available: false
+    disabled_reason: Ainda não há notas neste tipo.
+    disabled_reasons:
+      pt: Ainda não há notas neste tipo.
+      en: No notes in this type yet.
+
+  - id: mathematics
+    label: Matemática
+    labels:
+      pt: Matemática
+      en: Mathematics
+    tone: violet
+    available: false
+    disabled_reason: Ainda não há notas neste tipo.
+    disabled_reasons:
+      pt: Ainda não há notas neste tipo.
+      en: No notes in this type yet.

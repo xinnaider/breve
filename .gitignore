@@ -1,0 +1,64 @@
+.DS_Store
+*.swp
+*~
+
+macos/DerivedData/
+macos/*.xcodeproj/xcuserdata/
+macos/*.xcodeproj/project.xcworkspace/xcuserdata/
+*.xcuserstate
+*.xccheckout
+*.moved-aside
+
+# YAML no bundle é cópia do content/ no pre-build
+macos/Resources/*.yaml
+
+# Astro landing
+landing/node_modules/
+landing/dist/
+landing/.astro/
+
+# Ambiente local (publique só .env.example)
+.env
+.env.*
+!.env.example
+
+# Material privado de assinatura
+*.pem
+*.p12
+*.pfx
+*.key
+sparkle_eddsa*
+sparkle_private*
+
+# Artefatos locais de empacote e relatório
+*.zip
+*.dmg
+/build/
+/reports/
+
+# Compose real deste host (use compose.example.yaml no repositório público)
+/docker-compose.yml
+/docker-compose.yaml
+/compose.yml
+/compose.yaml
+!/compose.example.yaml
+
+# Trabalho local, fora da árvore pública
+AGENTS.md
+CLAUDE.md
+content/backup/
+docs/reference/revisao-conteudo.md
+docs/reference/revisao-conteudo-*.md
+docs/how-to/publicar-landing.md
+/index.html
+/directions.html
+/setup.html
+/catalog/
+/data/
+/vendor/
+content/development.yaml
+/assets/cast/
+/assets/directions/
+/assets/pixel/
+/assets/style-ref.jpg
+/assets/petzinho-idle.png

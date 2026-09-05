@@ -1,0 +1,13 @@
+# Exemplo genérico para servir a landing localmente.
+# Copie para docker-compose.yml e ajuste a porta.
+# Não inclui rede overlay, roteador HTTP nem certificados de um host específico.
+
+services:
+  landing:
+    build:
+      context: .
+      dockerfile: landing/Dockerfile
+    image: breve-landing:local
+    restart: unless-stopped
+    ports:
+      - "${LANDING_PORT:-8080}:80"

@@ -1,0 +1,259 @@
+# UI strings. Resolve with I18n.t("key") or session.t("key").
+# Interpolation: {name} in the string, pass ["name": value].
+
+menu.swap:
+  pt: Trocar
+  en: Next
+menu.settings:
+  pt: Configuração
+  en: Settings
+menu.update:
+  pt: Procurar atualização
+  en: Check for Updates
+menu.update.available:
+  pt: Atualização disponível
+  en: Update available
+menu.update.none:
+  pt: Sem atualização
+  en: No update
+menu.update.error:
+  pt: Falha ao procurar atualização
+  en: Update check failed
+menu.quit:
+  pt: Encerrar
+  en: Quit
+menu.language:
+  pt: Idioma
+  en: Language
+
+lang.pt:
+  pt: Português
+  en: Português
+lang.en:
+  pt: English
+  en: English
+
+widget.open:
+  pt: Abrir nota
+  en: Open note
+widget.close:
+  pt: Fechar nota
+  en: Close note
+widget.more:
+  pt: Ver mais
+  en: See more
+widget.collapse:
+  pt: Recolher
+  en: Collapse
+widget.quiz:
+  pt: Questionário
+  en: Quiz
+widget.info:
+  pt: Informação
+  en: Info
+widget.explain:
+  pt: Explicação
+  en: Explanation
+widget.example:
+  pt: Exemplo
+  en: Example
+
+setup.search:
+  pt: Buscar categoria
+  en: Search categories
+setup.search_a11y:
+  pt: Buscar
+  en: Search
+setup.all:
+  pt: Todos
+  en: All
+setup.continue:
+  pt: Avançar
+  en: Next
+setup.back:
+  pt: Voltar
+  en: Back
+setup.start:
+  pt: Começar
+  en: Start
+setup.cancel:
+  pt: Cancelar
+  en: Cancel
+setup.save:
+  pt: Salvar
+  en: Save
+setup.quiz:
+  pt: Questionário
+  en: Quiz
+setup.info_only:
+  pt: Só a informação
+  en: Info only
+setup.empty_search:
+  pt: Nada com “{query}”.
+  en: Nothing for “{query}”.
+setup.no_topic:
+  pt: Ainda não há notas neste tópico.
+  en: No notes in this topic yet.
+
+setup.types.title:
+  pt: O que você quer estudar?
+  en: What do you want to study?
+setup.types.hint:
+  pt: Escolha seus temas de interesse. Depois, escolha as categorias de cada um.
+  en: Choose your interests. Next, pick the categories within each theme.
+
+setup.topics.title:
+  pt: Escolha suas categorias
+  en: Choose your categories
+setup.topics.hint:
+  pt: Deixe marcado apenas o que você quer receber de cada tema.
+  en: Keep only the categories you want to receive from each theme.
+
+setup.learn.title:
+  pt: Como você quer aprender?
+  en: How do you want to learn?
+setup.learn.hint:
+  pt: Escolha o formato das suas pausas de estudo.
+  en: Choose a format for your study breaks.
+setup.learn.note:
+  pt: Pode marcar os dois. Aí cada dica sorteia se vem pergunta ou só o fato.
+  en: You can pick both. Then each tip is a question or just the fact.
+
+setup.settings.title:
+  pt: Seu jeito de estudar
+  en: Your study preferences
+setup.settings.hint:
+  pt: Ajuste suas escolhas quando quiser.
+  en: Adjust your choices whenever you like.
+
+setup.welcome:
+  pt: Vamos preparar o Breve
+  en: Let's set up Breve
+setup.done.title:
+  pt: Tudo pronto para aprender
+  en: Ready to learn
+setup.done.hint:
+  pt: Suas escolhas estão salvas. Um pouco de aprendizado, todos os dias.
+  en: Your choices are saved. A little learning, every day.
+setup.done.action:
+  pt: Vamos lá
+  en: Let's go
+setup.welcome_hint:
+  pt: Três passos para começar a estudar.
+  en: Three steps to start learning.
+setup.language_hint:
+  pt: Idioma da interface e do conteúdo de estudo.
+  en: Language for the interface and study content.
+setup.nav.learn:
+  pt: Formato
+  en: Format
+setup.nav.types:
+  pt: Temas
+  en: Themes
+setup.nav.topics:
+  pt: Categorias
+  en: Categories
+setup.mode.quiz:
+  pt: Questionários
+  en: Quizzes
+setup.mode.quiz_hint:
+  pt: Responda uma pergunta e confira a explicação.
+  en: Answer a question, then read the explanation.
+setup.mode.info:
+  pt: Só informativos
+  en: Information only
+setup.mode.info_hint:
+  pt: Leia notas curtas para aprender, sem responder perguntas.
+  en: Learn with short notes, without answering questions.
+setup.mode.both:
+  pt: Os dois
+  en: Both
+setup.mode.both_hint:
+  pt: Receba uma mistura de perguntas e notas ao longo do dia.
+  en: Receive a mix of questions and notes throughout the day.
+setup.change_later:
+  pt: Você pode mudar tudo isso nas configurações.
+  en: You can change all of this in settings.
+setup.category_count:
+  pt: "{count} categorias disponíveis"
+  en: "{count} available categories"
+setup.coming_soon:
+  pt: Ainda sem conteúdo
+  en: No content yet
+setup.theme.development:
+  pt: Código, arquitetura e boas práticas de desenvolvimento.
+  en: Code, architecture and development practices.
+setup.themes_note:
+  pt: Ao selecionar um tema, todas as categorias começam marcadas.
+  en: Selecting a theme includes all its categories to start with.
+setup.select_theme:
+  pt: Escolha um tema para ver suas categorias.
+  en: Choose a theme to see its categories.
+setup.choose_themes:
+  pt: Escolher temas
+  en: Choose themes
+setup.select_all:
+  pt: Marcar todas
+  en: Select all
+setup.clear_all:
+  pt: Desmarcar todas
+  en: Deselect all
+setup.categories_note:
+  pt: Mantenha pelo menos uma categoria marcada para receber conteúdo.
+  en: Keep at least one category selected to receive content.
+setup.summary:
+  pt: "Temas selecionados: {themes} · Categorias: {categories}"
+  en: "Selected themes: {themes} · Categories: {categories}"
+setup.selection_required:
+  pt: Escolha um tema e pelo menos uma categoria antes de concluir.
+  en: Choose a theme and at least one category before finishing.
+
+load.missing:
+  pt: Não achei {file} no pacote.
+  en: Couldn't find {file} in the bundle.
+load.empty:
+  pt: O catálogo YAML veio vazio.
+  en: The YAML catalog was empty.
+
+setup.nav.update:
+  pt: Atualização
+  en: Updates
+setup.update.title:
+  pt: Atualizações
+  en: Updates
+setup.update.hint:
+  pt: O Breve avisa quando houver uma versão nova. Nada é instalado sem a sua confirmação.
+  en: Breve lets you know when a new version is available. Nothing is installed without your confirmation.
+setup.update.current:
+  pt: "Versão instalada: {version} ({build})"
+  en: "Installed version: {version} ({build})"
+setup.update.check:
+  pt: Procurar atualização
+  en: Check for updates
+setup.update.install:
+  pt: Instalar e reabrir
+  en: Install and reopen
+setup.update.idle:
+  pt: Toque em Procurar atualização para conferir o feed.
+  en: Tap Check for updates to query the feed.
+setup.update.checking:
+  pt: Procurando atualização...
+  en: Checking for updates...
+setup.update.none:
+  pt: Você já está na versão mais recente ({version}).
+  en: You are already on the latest version ({version}).
+setup.update.available:
+  pt: "Versão {version} ({build}) disponível."
+  en: "Version {version} ({build}) is available."
+setup.update.error:
+  pt: "Não deu para conferir: {message}"
+  en: "Could not check: {message}"
+setup.update.confirm:
+  pt: O instalador pede confirmação antes de substituir o app e reabrir.
+  en: The installer asks for confirmation before replacing the app and reopening.
+setup.update.confirm_title:
+  pt: Instalar esta versão e reabrir o Breve?
+  en: Install this version and reopen Breve?
+setup.update.brew:
+  pt: Se um dia o cask do Homebrew tiver auto_updates, o Sparkle atualiza o app em Aplicativos. O brew upgrade normal não substitui esse app.
+  en: If a Homebrew cask is later published with auto_updates, Sparkle updates the app in Applications. A normal brew upgrade will not replace that app.

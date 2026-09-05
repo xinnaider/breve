@@ -1,0 +1,745 @@
+# Conteúdo de estudo em en. Espelho: development.pt.yaml
+# Fontes pedagógicas: content/SOURCES.md
+# IDs estáveis entre idiomas. Exemplos didáticos, notas de leitura rápida.
+
+type: development
+
+topics:
+  - id: solid
+    label: SOLID / OOP
+    mark: S
+    cards:
+      - id: god-class
+        frente: "A class calculates discounts, formats reports, and runs SQL. Why can this make changes harder?"
+        verso: "A **God Class** takes on too many jobs. Mixing discount rules, reports, and database access makes independent changes harder to isolate."
+        explicacao: |
+          A new promotion changes the pricing calculation. A new report format changes presentation. These needs can evolve separately.
+
+          Separating these jobs helps you change one without affecting the others. A service that simply coordinates collaborators is not automatically a God Class.
+        quiz:
+          opcoes:
+            - "Jobs that evolve independently have been concentrated in one class."
+            - "Any class that calls several services is a God Class."
+            - "The problem only exists after the class exceeds a thousand lines."
+          certa: 0
+
+      - id: srp-reason
+        frente: "Under the S in SOLID, why separate salary calculation from report generation?"
+        verso: "**S in SOLID: single responsibility.** Separate jobs that change for different needs. A new salary rule should not require changes to report generation."
+        explicacao: |
+          The Single Responsibility Principle (SRP) groups code serving the same responsibility. “One reason to change” refers to the need that prompts someone to request a change.
+
+          For example, finance changes the salary rule; auditing changes the report. Separating these responsibilities reduces the chance of one change interfering with the other.
+        quiz:
+          opcoes:
+            - "Because salary rules and report formats serve different needs."
+            - "Because each class must have exactly one method."
+            - "Because two jobs can never be part of the same workflow."
+          certa: 0
+
+      - id: ocp-if
+        frente: "New payment methods keep requiring changes to the same checkout. Which SOLID principle helps reduce these changes?"
+        verso: "**O in SOLID: open/closed.** Provide extension points to add behavior without rewriting stable logic. For example, add a payment method while keeping the checkout logic."
+        explicacao: |
+          The Open/Closed Principle (OCP) helps when a kind of variation keeps recurring. If new payment methods always change the same code, consider separating each method's execution.
+
+          An isolated `if` does not prove a violation. The decision depends on expected changes and the cost of creating the extension point.
+        quiz:
+          opcoes:
+            - "OCP: allow new behavior through an extension point."
+            - "ISP: give all payments an interface with every possible operation."
+            - "LSP: prevent different payments from sharing a contract."
+          certa: 0
+
+      - id: ocp-apply
+        frente: "How can you add payment methods without changing the checkout logic for each one?"
+        verso: "**O in SOLID in practice:** checkout uses a shared payment contract. Each method implements that contract, and configuration selects which implementation to supply."
+        explicacao: |
+          An `IPayment` interface can define a charge operation. Card and Pix payments implement the same operation, each using its own integration.
+
+          A new method still needs code, tests, and configuration. The benefit of the Open/Closed Principle (OCP) is preserving the checkout logic that uses the contract.
+        quiz:
+          opcoes:
+            - "Use a shared contract and supply the selected implementation to checkout."
+            - "Copy the entire checkout for each payment method."
+            - "Move all the if statements into a private method in the same checkout."
+          certa: 0
+
+      - id: lsp-sub
+        frente: "Under the L in SOLID, what must a subclass preserve when replacing its base class?"
+        verso: "**L in SOLID: Liskov substitution.** A subclass must honor its base class's contract: accept the expected inputs and preserve the promised guarantees."
+        explicacao: |
+          The Liskov Substitution Principle (LSP) concerns behavior. Inheriting the same methods is insufficient if their behavior becomes incompatible with the contract.
+
+          If a type promises to save documents, a subclass that always refuses to save because it is read-only breaks that promise. The contract needs to represent this difference.
+        quiz:
+          opcoes:
+            - "The accepted inputs and behavioral guarantees of the base class."
+            - "The exact internal implementation of every method."
+            - "Only the method names, even if their meaning changes."
+          certa: 0
+
+      - id: isp-fat
+        frente: "Under the I in SOLID, which interface should a service that only reads orders depend on?"
+        verso: "**I in SOLID: interface segregation.** Code using an interface should depend only on the operations it needs. An order lookup service does not need cancellation operations."
+        explicacao: |
+          In the Interface Segregation Principle (ISP), a “client” is code that uses the interface. Separating lookup from cancellation avoids coupling that code to unrelated operations.
+
+          One class can implement both interfaces. The split follows usage needs, without requiring one interface per method.
+        quiz:
+          opcoes:
+            - "An interface containing the lookup operations it needs."
+            - "An interface combining every operation in the system."
+            - "A different interface for each call, even when they serve the same purpose."
+          certa: 0
+
+      - id: dip
+        frente: "Under the D in SOLID, how can checkout rules avoid depending on a gateway library?"
+        verso: "**D in SOLID: dependency inversion.** Business rules use a contract. The gateway integration implements that contract, keeping external details out of the rules."
+        explicacao: |
+          In the Dependency Inversion Principle (DIP), both the high-level rules and the integration depend on the abstraction. For example, checkout requests a charge without knowing the provider's specific API.
+
+          Dependency injection is one way to supply this integration to checkout. Using a DI container alone does not guarantee dependency inversion.
+        quiz:
+          opcoes:
+            - "Define a payment contract and have the integration implement it."
+            - "Inject the provider's class and consider the problem solved."
+            - "Copy the gateway API call into every business rule."
+          certa: 0
+
+  - id: ddd
+    label: DDD
+    mark: D
+    cards:
+      - id: what-is-ddd
+        frente: "What is the central idea of Domain-Driven Design (DDD)?"
+        verso: "**DDD: Domain-Driven Design.** Model software around business rules and language, building that understanding with people who know the subject."
+        explicacao: |
+          The domain is the area the software serves, such as sales or delivery. The model represents the important concepts and rules in that area.
+
+          Developers and domain experts agree on the meaning of terms such as “approved order” and use that meaning in conversations and code. This shared language is called ubiquitous language.
+        quiz:
+          opcoes:
+            - "Build the model around business rules and language."
+            - "Start with database tables and use their names to define the business."
+            - "Turn every entity into a separate microservice."
+          certa: 0
+
+      - id: bounded-context
+        frente: "What does a bounded context delimit in DDD?"
+        verso: "A **DDD bounded context** is the boundary within which a model and its terms have consistent meanings. Sales and billing may use different models of “customer.”"
+        explicacao: |
+          In sales, a customer might have preferences and opportunities. In billing, a customer might have invoicing details and debts. Each model serves a particular need.
+
+          This boundary must be explicit, but it does not require a microservice. Contexts can exist as modules within the same application.
+        quiz:
+          opcoes:
+            - "The area within which a model and its language have consistent meanings."
+            - "Necessarily a process with its own exclusive database."
+            - "The entire company, which must use one customer model."
+          certa: 0
+
+      - id: aggregate
+        frente: "In DDD, why change order items through the aggregate root?"
+        verso: "A **DDD aggregate** groups objects whose rules must remain consistent. Its root controls changes; for example, an order prevents adding items after cancellation."
+        explicacao: |
+          The root is the aggregate's entry entity. In this example, `Order.AddItem` checks the order's status before changing its items.
+
+          The aggregate defines what must remain consistent within a transaction. Its size follows those rules, and it can contain only the root itself.
+        quiz:
+          opcoes:
+            - "To enforce order rules before changing its items."
+            - "To put every entity in the application into one transaction."
+            - "To let each item ignore the order's status."
+          certa: 0
+
+      - id: entity-vs-vo
+        frente: "In DDD, what distinguishes an entity from a value object?"
+        verso: "A **DDD entity** is recognized by its identity even when its data changes. A **value object** is recognized by its values, such as an amount and a currency."
+        explicacao: |
+          An order remains the same order after its status changes. Two monetary values of 10 Brazilian reais are equivalent because both their amount and currency match.
+
+          Value objects are usually immutable: changing the amount creates a new value. Having an ID column in a database does not, by itself, determine which concept an object represents.
+        quiz:
+          opcoes:
+            - "An entity has its own identity; a value object is compared by its values."
+            - "An entity lives in the database; a value object only exists in the UI."
+            - "Two orders with matching fields are always the same entity."
+          certa: 0
+
+  - id: architecture
+    label: Clean / CQRS
+    mark: A
+    cards:
+      - id: fat-controller
+        frente: "A controller calculates discounts, runs SQL, and calls a gateway. What should you separate first?"
+        verso: "A **controller with too many responsibilities** benefits from separating business rules and integrations from HTTP handling. Each part becomes easier to reuse and test."
+        explicacao: |
+          A discount calculation may be needed by both an API and a scheduled task. Keeping it in an independent rule avoids duplicating the logic.
+
+          In Clean Architecture, rules do not depend on the controller or database. This facilitates isolated tests; controllers can also have unit tests without starting a server.
+        quiz:
+          opcoes:
+            - "Separate rules and integrations from code handling the HTTP request."
+            - "Split the method into regions while retaining every dependency."
+            - "Move the entire code into a controller with a different name."
+          certa: 0
+
+      - id: controller-role
+        frente: "In an API organized around use cases, what is the controller's role?"
+        verso: "A **controller** connects HTTP to the application: it receives request data, calls a use case, and turns the result into an HTTP response."
+        explicacao: |
+          A use case is an application operation, such as canceling an order. It coordinates the required rules; the controller translates the result into a response status and body.
+
+          Authentication, authorization, and input validation can involve middleware, filters, and framework features. Business rules should remain valid when another entry point calls the operation.
+        quiz:
+          opcoes:
+            - "Receive input, call the use case, and return an HTTP response."
+            - "Define discounts and credit limits inside each endpoint."
+            - "Determine all business rules solely from the request headers."
+          certa: 0
+
+      - id: cqrs-what
+        frente: "What does the CQRS pattern separate?"
+        verso: "**CQRS** separates write and read models. Commands perform changes; queries present data. Both sides can use the same database."
+        explicacao: |
+          The acronym means Command Query Responsibility Segregation. For example, approving an order uses write rules; listing orders uses a model suited to the screen.
+
+          The separation concerns models and their responsibilities. Having GET and POST methods alone does not establish CQRS, and using events or separate databases is optional.
+        quiz:
+          opcoes:
+            - "The models used to change data and to query it."
+            - "Necessarily each entity's database onto a separate server."
+            - "Only HTTP verbs, keeping one model for everything."
+          certa: 0
+
+      - id: cqrs-when
+        frente: "When is CQRS worth considering?"
+        verso: "**CQRS** can help when reads and writes need different models or performance characteristics. The separation should justify the extra work of maintaining both sides."
+        explicacao: |
+          Approving an order may involve several rules; a dashboard may only need summary totals. Separate models can better serve these different needs.
+
+          For simple record management, a shared read and write approach is often sufficient. If reads use a copy updated by events, you also need to handle update delays.
+        quiz:
+          opcoes:
+            - "When reads and writes have different needs that justify the separation."
+            - "Whenever an application has at least one GET and one POST."
+            - "When the goal is to eliminate every possibility of stale data."
+          certa: 0
+  - id: patterns
+    label: Design Patterns
+    mark: P
+    cards:
+      - id: strategy-pay
+        frente: "In design patterns, how does Strategy organize different ways to calculate shipping?"
+        verso: "The **Strategy** pattern puts different ways to perform a task behind the same contract. Checkout requests a shipping cost; the selected strategy calculates it."
+        explicacao: |
+          Store pickup and express delivery can use different calculations while both answer `CalculateShipping(order)`.
+
+          Checkout receives the appropriate strategy and calls that operation. It does not need to know the details of each calculation.
+
+          The strategy still needs to be selected. The pattern separates calculations; it does not remove every `if` in the system.
+        quiz:
+          opcoes:
+            - "Separate the calculations into strategies with the same contract."
+            - "Use Singleton so every order has the same shipping cost."
+            - "Use Observer to automatically choose the cheapest shipping."
+          certa: 0
+
+      - id: strategy-vs-factory
+        frente: "In design patterns, how do Strategy and Factory differ?"
+        verso: "A **Factory** handles object creation. **Strategy** lets you choose between behaviors that follow the same contract."
+        explicacao: |
+          A factory can create an express shipping strategy. That strategy calculates the delivery cost.
+
+          They can work together, but neither requires the other. A ready-made strategy can also be passed into a constructor.
+
+          Factory is a general term: Factory Method and Abstract Factory are creation patterns with different structures.
+        quiz:
+          opcoes:
+            - "Factory handles creation; Strategy organizes interchangeable behaviors."
+            - "Factory performs the calculation; Strategy only creates the object."
+            - "Strategy requires a Factory to work."
+          certa: 0
+
+  - id: di
+    label: DI / .NET
+    mark: DI
+    cards:
+      - id: di-lifetimes
+        frente: "In .NET DI, how do Transient, Scoped, and Singleton differ?"
+        verso: "In .NET **DI** (Dependency Injection), Transient creates on each resolution, Scoped reuses within a scope, and Singleton reuses within the container."
+        explicacao: |
+          Resolving means requesting a service from the DI container. With Transient, each request for the service creates an instance.
+
+          Scoped shares an instance within a scope. In ASP.NET Core, each HTTP request normally has its own scope.
+
+          Singleton shares an instance for the container's lifetime. It may serve several requests at once, so it must support concurrent use.
+        codigo: |
+          services.AddTransient<ITokenParser, TokenParser>();
+          services.AddScoped<OrderService>();
+          services.AddSingleton<IClock, SystemClock>();
+        quiz:
+          opcoes:
+            - "Transient: per resolution. Scoped: per scope. Singleton: per container."
+            - "Transient: per request. Scoped: per user. Singleton: per physical server."
+            - "All three create a new instance on every method call."
+          certa: 0
+
+      - id: singleton-dbcontext
+        frente: "In .NET DI, why should a Singleton not receive a Scoped DbContext directly?"
+        verso: "In **.NET DI**, a Singleton can keep a Scoped **DbContext** alive beyond its intended scope. Scope validation detects this invalid dependency."
+        explicacao: |
+          A Singleton outlives a request scope. Storing the context in it prevents each operation from using a context with the expected lifetime.
+
+          With scope validation enabled, the container rejects this dependency. Without it, the context can end up shared across requests.
+
+          DbContext does not support simultaneous use by multiple threads. `AsNoTracking` and pooling do not fix this captured dependency.
+        quiz:
+          opcoes:
+            - "The Singleton can extend the context's lifetime and share it incorrectly."
+            - "DbContext only works when registered as Singleton."
+            - "AsNoTracking makes sharing a context across threads safe."
+          certa: 0
+
+      - id: fix-lifetime
+        frente: "In .NET DI, how can you use DbContext without keeping it in a Singleton?"
+        verso: "In **.NET DI**, use a Scoped service with a Scoped **DbContext**. If Singleton is necessary, create and dispose a context or scope for each operation."
+        explicacao: |
+          A service that handles a request can be Scoped, just like the context injected into it.
+
+          A Singleton worker can use `IDbContextFactory` to create a context for each operation and dispose it afterward. Keep the factory, not the context.
+
+          Another option is `IServiceScopeFactory`: create a scope, resolve Scoped services inside it, and dispose the scope after the work finishes.
+        quiz:
+          opcoes:
+            - "Align the scopes or create and dispose a context for each operation."
+            - "Register DbContext as Singleton to make the lifetimes match."
+            - "Create a context through the factory and keep it in the Singleton forever."
+          certa: 0
+
+  - id: messaging
+    label: SNS / SQS
+    mark: Q
+    cards:
+      - id: sns-vs-sqs
+        frente: "On AWS, how do SNS (Simple Notification Service) and SQS (Simple Queue Service) differ?"
+        verso: "On AWS, **SNS** (Simple Notification Service) distributes topic messages to subscribers. **SQS** (Simple Queue Service) stores messages in a queue for consumers to retrieve."
+        explicacao: |
+          An SNS topic can send an OrderApproved event to several SQS queues. Each service retrieves work from its queue when it can process it.
+
+          In SQS, messages remain in the queue until deleted or their retention expires. After successful processing, the consumer requests deletion.
+
+          SNS also retries failed deliveries; FIFO topics can have archiving and replay configured. The distinction is not simply whether messages are stored.
+        quiz:
+          opcoes:
+            - "SNS distributes to subscribers; SQS provides a queue to retrieve work from."
+            - "SNS requires consumers to fetch messages; SQS sends to all subscribers."
+            - "SNS and SQS are two names for the same queue service."
+          certa: 0
+
+      - id: pedido-fanout
+        frente: "With SNS and SQS fan-out, how can inventory, fraud, BI, and notifications each receive every event?"
+        verso: "**Fan-out** distributes one event to several destinations. With **SNS and SQS**, subscribe one queue per service that needs its own copy."
+        explicacao: |
+          When OrderApproved is published, SNS sends a copy to each eligible subscribed queue. Inventory and notifications can process at different speeds.
+
+          If all four services retrieve from the same queue, they compete for messages. That divides the work; it does not guarantee a copy for every service.
+
+          Several inventory instances can share the inventory queue. BI keeps its own queue.
+        quiz:
+          opcoes:
+            - "One SNS topic with an SQS queue for each service."
+            - "One SQS queue shared by all four services."
+            - "Four instances reading the same queue, one from each service."
+          certa: 0
+        mapa:
+          layout: fanout
+          titulo: "Fan-out"
+          origem:
+            label: "Order approved"
+            kind: event
+          hub:
+            label: "OrderApproved"
+            kind: sns
+          destinos:
+            - label: "inventory"
+              kind: sqs
+            - label: "fraud"
+              kind: sqs
+            - label: "BI"
+              kind: sqs
+            - label: "notifications"
+              kind: sqs
+
+      - id: unavailable-consumer
+        frente: "With SNS and SQS fan-out, what happens if only the notification service goes down?"
+        verso: "In **SNS and SQS fan-out**, separate queues isolate pending work. The notification queue accumulates messages while other services keep processing."
+        explicacao: |
+          Once a message reaches the notification queue, it can wait for the service to recover, within the configured retention period.
+
+          Inventory does not have to wait for that recovery: it retrieves messages from its own queue.
+
+          Monitor message count and age. A queue gives you time to recover a service, but it does not keep work forever.
+        quiz:
+          opcoes:
+            - "Messages wait in the notification queue, within its retention period."
+            - "All queues stop until the notification service recovers."
+            - "Inventory automatically starts receiving and sending the notifications."
+          certa: 0
+
+  - id: reliability
+    label: Idempotency / DLQ
+    mark: I
+    cards:
+      - id: idempotency
+        frente: "In messaging, what does idempotency mean when processing a charge?"
+        verso: "**Idempotency** means repeating the same operation has the same effect as performing it once. Redelivering the same charge must not charge the customer again."
+        explicacao: |
+          With SQS Standard, a message may arrive more than once. A failure after charging but before deleting the message can also trigger processing again.
+
+          The consumer needs to recognize the same operation and avoid repeating its effect. For payments, this protection must also cover the provider that performs the charge.
+
+          Idempotency does not prevent retries. It makes those retries safe for the same operation.
+        quiz:
+          opcoes:
+            - "Repeating the same charge keeps a single charging effect."
+            - "Each delivery creates a charge with a different identifier."
+            - "The queue prevents all repetition, so the consumer needs no protection."
+          certa: 0
+
+      - id: duplicate-charge
+        frente: "For payments, how can you prevent duplicate charges despite failures and simultaneous attempts?"
+        verso: "An **idempotency key** identifies the charge at the provider. Reuse the same key across attempts and keep a durable record of the operation."
+        explicacao: |
+          Two workers can check at the same time and both charge. A worker can also charge, crash before saving the result, and charge again on retry.
+
+          Record the operation with uniqueness and atomic concurrency control in the database. Send the same key and data to the provider; storing the key only locally does not protect the external call.
+
+          If the response is lost, query the provider or retry according to its idempotency contract. Respect the key's validity period and reconcile uncertain results before attempting a new charge.
+        quiz:
+          opcoes:
+            - "Coordinate the operation in the database and reuse the key accepted by the provider."
+            - "Check whether it was processed, charge, then mark it, without other protection."
+            - "Generate a different key for every retry to avoid repeating identifiers."
+          certa: 0
+
+      - id: dlq
+        frente: "In SQS, what is a DLQ (Dead Letter Queue) for?"
+        verso: "In **SQS**, a **DLQ** (Dead Letter Queue) receives messages that exceed the configured receive limit after processing failures."
+        explicacao: |
+          An invalid message may fail every time. With a redrive policy, SQS moves it to the DLQ after the `maxReceiveCount` limit so it can be investigated separately.
+
+          Set alerts and investigate the cause before resending messages. Resending without fixing the problem may repeat the failure.
+
+          Not every business rejection is a technical error: a declined payment may be a valid outcome to record. Define which failures deserve another attempt.
+        quiz:
+          opcoes:
+            - "Separate messages that exceed the receive limit for investigation."
+            - "Retry messages without a limit until every message succeeds."
+            - "Automatically fix the contents of invalid messages."
+          certa: 0
+  - id: aws
+    label: Scale / IaC
+    mark: K
+    cards:
+      - id: hpa
+        frente: "In Kubernetes, what does the HPA (Horizontal Pod Autoscaler) adjust?"
+        verso: "In Kubernetes, the **HPA** (Horizontal Pod Autoscaler) adjusts the number of replicas based on configured metrics and limits."
+        explicacao: |
+          A pod runs the application's containers. As load grows, the HPA can request more copies to share the work.
+
+          The machines that host pods are called nodes. Increasing that capacity requires another mechanism, such as a node autoscaler.
+        quiz:
+          opcoes:
+            - "The number of application replicas."
+            - "The CPU reserved for each existing pod."
+            - "The number of machines in the cluster."
+          certa: 0
+
+      - id: pending-pods
+        frente: "In Kubernetes, new pods are Pending because nodes lack available CPU. What do they need to run?"
+        verso: "In Kubernetes, a pod that is **Pending** because of insufficient resources needs room on a compatible node. Requesting more replicas does not create that capacity."
+        explicacao: |
+          If there is room for only 30 of 100 requested pods, the others wait. The scheduler considers the resources requested by pods, not just CPU usage at that moment.
+
+          Check pod events to confirm the cause. Adding nodes can address insufficient capacity; scheduling restrictions or volume problems need different fixes.
+        quiz:
+          opcoes:
+            - "Only increase the HPA's maximum replica count."
+            - "Have available resources on nodes that meet the pods' requirements."
+            - "Increase the CPU limit of pods that are already running."
+          certa: 1
+
+      - id: cloudformation
+        frente: "What is AWS CloudFormation used for?"
+        verso: "**AWS CloudFormation** creates and updates resources from templates. This is **IaC** (Infrastructure as Code): describing infrastructure in files."
+        explicacao: |
+          For example, a template defines a queue and its permissions. Parameters let you reuse the definition with different names or sizes for each environment.
+
+          Versioning the template helps people review changes. Changes made outside it can cause a mismatch called drift; drift detection checks supported resources and properties.
+        quiz:
+          opcoes:
+            - "Automatically adjust replicas based on incoming traffic."
+            - "Copy all production data into staging."
+            - "Provision resources using a definition that can be versioned."
+          certa: 2
+
+      - id: bottleneck
+        frente: "An API is waiting for an overloaded database. Why might adding API replicas fail to help?"
+        verso: "With **horizontal scaling**, more replicas help when they share the work that limits the system. If a shared database is the bottleneck, replicas can increase contention."
+        explicacao: |
+          Imagine several instances waiting for the same slow query. Creating more instances does not make that query faster.
+
+          Use metrics and traces to locate the wait, then test the change under load. Connection shortages, slow queries, and lock contention are different causes with different solutions.
+        quiz:
+          opcoes:
+            - "The replicas still depend on the same overloaded database."
+            - "Each replica starts using an independent copy of the database."
+            - "Adding replicas automatically reduces the cost of each query."
+          certa: 0
+
+  - id: security
+    label: Security
+    mark: SE
+    cards:
+      - id: jwt-localstorage
+        frente: "Why does storing a session JWT (JSON Web Token) in localStorage increase the risk of token theft?"
+        verso: "A **JWT** (JSON Web Token) in `localStorage` is readable by page JavaScript. An **XSS** (Cross-Site Scripting) vulnerability can expose that token to injected code."
+        explicacao: |
+          If an attacker can run code in the application's origin, they can read the token and try to use it while it remains valid.
+
+          An HttpOnly cookie prevents JavaScript from reading that cookie. This reduces extraction risk, but malicious code can still perform actions through the open session.
+        quiz:
+          opcoes:
+            - "Any website open in another tab can read that localStorage."
+            - "A script injected into the application can read the stored token."
+            - "The JWT signature prevents JavaScript from reading its value."
+          certa: 1
+
+      - id: jwt-cookie
+        frente: "A JWT (JSON Web Token) authenticates a session through a cookie. What does HttpOnly protect?"
+        verso: "For a **session cookie**, `HttpOnly` prevents JavaScript access. `Secure` requires HTTPS, and `SameSite` restricts cross-site sending. These protections serve different purposes."
+        explicacao: |
+          The browser can send the cookie automatically. The server therefore needs protection against CSRF (Cross-Site Request Forgery), where another site induces an authenticated action.
+
+          Use the framework's protection, such as CSRF token validation for operations that change data. SameSite adds a layer of defense; HttpOnly does not eliminate XSS or CSRF.
+        quiz:
+          opcoes:
+            - "It prevents any malicious script from running on the page."
+            - "It stops the browser from automatically sending the cookie."
+            - "It prevents JavaScript from reading the session cookie."
+          certa: 2
+
+      - id: iam-role
+        frente: "An application on AWS needs S3 access. How can it avoid permanent access keys in code?"
+        verso: "On AWS, an **IAM Role** (Identity and Access Management) allows an application to obtain temporary credentials with the permissions it needs."
+        explicacao: |
+          Configure the role for the application's environment, such as an ECS task or EC2 instance. The SDK can obtain and refresh credentials through that integration.
+
+          Grant only the access required. For database passwords or external service keys, Secrets Manager can store and manage those secrets.
+        quiz:
+          opcoes:
+            - "Use an application role with temporary credentials and limited permissions."
+            - "Store a permanent access key in a private repository."
+            - "Share a developer's access key across all instances."
+          certa: 0
+
+  - id: react
+    label: React
+    mark: R
+    cards:
+      - id: rerender
+        frente: "In React, a list becomes slow when updates arrive. What is the first step in investigating it?"
+        verso: "In **React**, use the Profiler to measure which components render and how much work they take. A re-render does not mean recreating the component or changing the entire DOM."
+        explicacao: |
+          Updating a component's state can render its children again. React calculates the result and applies only the necessary changes to the DOM.
+
+          Reproduce the slowdown and examine expensive renders. A changing key can also recreate a component and reset its state, but that differs from simply rendering again.
+        quiz:
+          opcoes:
+            - "Add memoization to every component before measuring."
+            - "Measure the update with the Profiler and locate the most expensive work."
+            - "Change the keys on every event to force a new list."
+          certa: 1
+
+      - id: memo-list
+        frente: "In React, profiling shows expensive rows rendering with the same props. When can memo help?"
+        verso: "In **React**, `memo` can skip rendering a component when its props have not changed. It optimizes measured work; it does not guarantee that the component will never render."
+        explicacao: |
+          If a row receives the same order object, memo can reuse the result. Creating a new object or function on every render can prevent this reuse.
+
+          Changes to the row's own state or context can still render it. Use stable keys to preserve identity; for very large lists, consider pagination or virtualization, which renders only a window of items.
+        quiz:
+          opcoes:
+            - "When props differ but the key stays the same."
+            - "When updates to the row's own state must also be blocked."
+            - "When expensive renders repeat the same props."
+          certa: 2
+
+      - id: state-realtime
+        frente: "In React, how can you organize orders that receive individual real-time updates?"
+        verso: "In **React**, storing orders by ID makes it easier to update one item without replacing the others' objects. This organization is called **normalized state**."
+        explicacao: |
+          When order 42 changes, create a new version of it and preserve references to the other orders. The immutable update may still copy the object that holds the map.
+
+          This helps memoized components or selectors recognize unchanged data. A map alone does not prevent renders; the result also depends on how components receive or subscribe to data.
+        quiz:
+          opcoes:
+            - "Replace the changed order and preserve the other orders' objects."
+            - "Modify the order directly in state without notifying React."
+            - "Create new objects for every order on each event."
+          certa: 0
+  - id: database
+    label: PostgreSQL
+    mark: DB
+    cards:
+      - id: slow-query
+        frente: "Order history is slow. How do you investigate the PostgreSQL query?"
+        verso: "**Slow query:** use `EXPLAIN` to inspect the PostgreSQL plan. Add `ANALYZE` to measure an actual execution."
+        explicacao: |
+          The plan shows how the database finds, joins, and sorts data. Compare estimated and actual row counts to identify expensive steps.
+
+          `EXPLAIN ANALYZE` runs the query, including data changes. Consider the impact before running it; `BUFFERS` helps reveal page access.
+
+          Reading the whole table can be efficient. A `Seq Scan` alone does not prove an index is missing.
+        quiz:
+          opcoes:
+            - "Inspect the plan and measure the query carefully."
+            - "Create an index before inspecting the query."
+            - "Raise the timeout to make the query run faster."
+          certa: 0
+
+      - id: when-index
+        frente: "Which index might help list a user’s recent orders in PostgreSQL?"
+        verso: "**Composite index:** `(user_id, created_at)` can help filter by user and retrieve their orders by date."
+        explicacao: |
+          For `WHERE user_id = ... ORDER BY created_at DESC LIMIT 20`, a B-tree index on these columns can avoid reading and sorting many orders.
+
+          Column order in the index matters; the order of AND conditions written in WHERE does not determine it. Confirm the benefit in the plan.
+        quiz:
+          opcoes:
+            - "An index on user and date, checked against the actual query."
+            - "An index on date alone always eliminates filtering by user."
+            - "The order of conditions in WHERE determines the correct index order."
+          certa: 0
+
+      - id: index-hurts
+        frente: "Why not index every PostgreSQL column?"
+        verso: "**Indexes have a cost:** they use storage and must track data changes. Add them to support queries or enforce rules such as uniqueness."
+        explicacao: |
+          Inserts and updates can require index maintenance. Higher maintenance costs mean more work when writing data.
+
+          A rarely used index may not justify its cost. Before removing it, check whether it enforces a constraint or supports a rare but important query.
+        quiz:
+          opcoes:
+            - "Indexes consume storage and add work to writes."
+            - "PostgreSQL allows only one index per table."
+            - "Every index makes all reads slower."
+          certa: 0
+
+  - id: observability
+    label: Observability
+    mark: OB
+    cards:
+      - id: no-error-logs
+        frente: "The system is slow, but there are no error logs. What should you check?"
+        verso: "**Observability:** track response times and system load. A request can take a long time and still finish without an error."
+        explicacao: |
+          First, identify which operations are slow, when it started, and which users are affected. Compare response times with the usual baseline.
+
+          Then look for time spent waiting on the database, CPU, or external services. An absence of exception logs does not establish system health.
+        quiz:
+          opcoes:
+            - "Measure response times and investigate where time is spent waiting."
+            - "Conclude that the browser is slow because there are no exceptions."
+            - "Only check that the health endpoint returns success."
+          certa: 0
+
+      - id: trace
+        frente: "How do metrics, traces, and logs help investigate slowness?"
+        verso: "**Metrics** summarize behavior. **Traces** show an operation’s path and time spent in each step. **Logs** record events and details."
+        explicacao: |
+          For example, a metric shows rising latency. A trace shows a database call taking most of the time. Logs provide details about that execution.
+
+          Each recorded step in a trace is a span. Adding `trace_id` to logs helps connect those details to the same trace; only instrumented steps are visible.
+        quiz:
+          opcoes:
+            - "Combine metric trends with trace steps and log details."
+            - "Use metrics to automatically obtain every detail of each request."
+            - "Treat each log line as a complete trace across services."
+          certa: 0
+
+      - id: incident-comms
+        frente: "What should you communicate during an incident before the cause is known?"
+        verso: "**Incident communication:** share the known impact, current action, and time of the next update. Separate facts from hypotheses."
+        explicacao: |
+          Fictional example: “Some orders are taking longer to complete. We are investigating database queries. Next update at 18:20.”
+
+          Keep people informed even before a fix is ready. Give a recovery estimate only when there is evidence to support it.
+        quiz:
+          opcoes:
+            - "Known impact, current action, and time of the next update."
+            - "Wait for a confirmed cause before notifying stakeholders."
+            - "Promise a recovery time without supporting evidence."
+          certa: 0
+
+  - id: rag
+    label: RAG / AI
+    mark: AI
+    cards:
+      - id: what-is-rag
+        frente: "What is RAG in an AI application?"
+        verso: "**RAG** means Retrieval-Augmented Generation: the application finds relevant information and gives it to the model to help answer a question."
+        explicacao: |
+          For example, retrieve the vacation policy before answering how many days an employee can take.
+
+          The basic flow is question → search → retrieved passages → answer. Search can use keywords, vectors, or both; this flow does not require retraining the model.
+        quiz:
+          opcoes:
+            - "Retrieve information and supply it to the model when answering."
+            - "Retrain the model every time someone asks a question."
+            - "Use only knowledge the model has already learned."
+          certa: 0
+
+      - id: why-rag
+        frente: "Why retrieve passages instead of sending every document to the model?"
+        verso: "**Retrieval in RAG:** selects material relevant to the question. This can reduce cost and irrelevant text sent to the model."
+        explicacao: |
+          A model accepts a limited amount of text per call, called its context window. A large collection may exceed that limit.
+
+          A small collection may fit in full. Compare approaches using real questions: retrieving less text only helps if the search finds what the answer needs.
+        quiz:
+          opcoes:
+            - "To select relevant information within context and cost limits."
+            - "Because no model accepts a complete document."
+            - "Because retrieval guarantees every answer will be correct."
+          certa: 0
+
+      - id: chunking
+        frente: "What is chunking in RAG?"
+        verso: "**Chunking** splits documents into passages that can be retrieved separately. Each passage should retain enough context to make sense."
+        explicacao: |
+          For example, keep a reimbursement rule together with its conditions. Store the source and section so the original can be located.
+
+          Repeating some text between passages, called overlap, can help at boundaries. Test chunk size and overlap; no single percentage suits every document.
+        quiz:
+          opcoes:
+            - "Split into understandable passages and retain the source reference."
+            - "Always cut at a fixed character count regardless of content."
+            - "Repeat 20% of the text to guarantee good answers for any document."
+          certa: 0
+
+      - id: hallucination
+        frente: "How can a RAG system reduce unsupported answers?"
+        verso: "**RAG and hallucination:** use passages that support the answer, check citations, and acknowledge when the sources lack enough information."
+        explicacao: |
+          Retrieving some text is not enough: it must address the question. A citation can also point to a passage that does not support the claim.
+
+          Test questions with known answers and questions the documents cannot answer. Evaluate both retrieval and faithfulness to sources; requesting citations does not eliminate errors.
+        quiz:
+          opcoes:
+            - "Verify support in the sources and acknowledge missing information."
+            - "Accept any answer that includes a document name."
+            - "Treat the answer as correct whenever retrieval returns a passage."
+          certa: 0

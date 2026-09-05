@@ -1,0 +1,60 @@
+---
+import { Image } from 'astro:assets';
+import mascot from '../../../assets/bonequinho.png';
+import wallpaper from '../assets/desktop-wallpaper.png';
+---
+
+<section class="demo-section wrap" id="conhecer" aria-label="Conheça o Breve no seu Mac">
+  <div class="mac-screen">
+    <Image class="wallpaper" src={wallpaper} alt="" widths={[640, 1080, 1600, 2160]} sizes="(max-width: 700px) 100vw, 1080px" loading="eager" quality={85} />
+    <div class="mac-menu" aria-hidden="true">
+      <div class="menu-left">
+        <svg class="apple" viewBox="0 0 24 24" fill="currentColor"><path d="M18.7 19.5c-.8 1.2-1.7 2.4-3 2.5-1.4 0-1.8-.8-3.3-.8s-2 .8-3.3.8c-1.3 0-2.3-1.3-3.1-2.5C3.7 16.1 2 10 4.6 6.9c1.2-1.5 3.2-1.8 4.9-1.2.9.3 1.8.8 2.5.8.8 0 2-.6 3.2-.8 1.6-.2 3.1.5 4 1.6-3.3 1.8-2.8 6.2.7 7.6-.3 1.3-.8 2.7-1.2 3.6ZM12.8 5.1c-.3-2.1 1.5-4.1 3.4-4.4.3 2-1.4 4.2-3.4 4.4Z"/></svg>
+        <strong>Finder</strong><span>Arquivo</span><span>Editar</span><span class="optional-menu">Visualizar</span>
+      </div>
+      <div class="menu-right">
+        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 7a12 12 0 0 1 16 0M5 10a8 8 0 0 1 10 0M8 13a3 3 0 0 1 4 0"/><circle cx="10" cy="16" r=".6" fill="currentColor"/></svg>
+        <span>09:41</span>
+      </div>
+    </div>
+
+    <div class="desktop-folder" aria-hidden="true">
+      <svg viewBox="0 0 64 54" fill="none"><path d="M4 11a4 4 0 0 1 4-4h17l6 6h25a4 4 0 0 1 4 4v29a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4Z" fill="#8AB7BF"/><path d="M4 22a4 4 0 0 1 4-4h48a4 4 0 0 1 4 4v24a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4Z" fill="#ADD0D6"/></svg>
+      <span>Meus estudos</span>
+    </div>
+
+    <div class="breve-widget">
+      <article class="study-card" id="breve-note" aria-label="Informativo de exemplo do Breve">
+        <div class="card-meta">
+          <span class="type-badge">Programação</span>
+          <span class="topic-badge"><span class="topic-icon" aria-hidden="true">S</span> SOLID</span>
+          <span class="card-kind">Informativo</span>
+        </div>
+        <h2>S de SOLID: responsabilidade única. Separe tarefas que mudam por necessidades diferentes. Uma nova regra de salário não deveria exigir alterar a geração de relatórios.</h2>
+        <div id="note-details" hidden>
+          <p class="explanation-label">EXPLICAÇÃO</p>
+          <p>O Single Responsibility Principle (SRP) agrupa código que atende à mesma responsabilidade. A expressão “um motivo para mudar” se refere à necessidade que leva alguém a pedir uma alteração.</p>
+          <p>Por exemplo: o financeiro muda a regra de salário; a auditoria muda o relatório. Separar essas responsabilidades reduz a chance de uma mudança atrapalhar a outra.</p>
+        </div>
+        <button id="expand-note" aria-expanded="false" aria-controls="note-details" aria-label="Ver explicação">⌄</button>
+        <span class="bubble-tip" aria-hidden="true"></span>
+      </article>
+      <button class="mascot-button" type="button" id="toggle-note" aria-expanded="true" aria-controls="breve-note" aria-label="Fechar informativo do Breve">
+        <Image src={mascot} alt="" width={56} height={56} loading="eager" draggable="false" />
+      </button>
+    </div>
+
+    <div class="mac-dock" aria-hidden="true">
+      <span class="dock-icon finder-icon"><svg viewBox="0 0 40 40" fill="none"><path d="M20 2v22h5v14M9 14v4m22-4v4M9 27q11 8 22 0" stroke="#23404D" stroke-width="2" stroke-linecap="round"/></svg></span>
+      <span class="dock-icon notes-icon"><i></i><i></i><i></i></span>
+      <span class="dock-icon calendar-icon"><small>SET</small><b>4</b></span>
+      <span class="dock-icon terminal-icon">›_</span>
+      <span class="dock-divider"></span>
+      <span class="dock-breve"><Image src={mascot} alt="" width={42} height={43} /></span>
+    </div>
+  </div>
+</section>
+
+<script>
+  import '../scripts/demo.js';
+</script>

@@ -1,0 +1,67 @@
+---
+import { Image, getImage } from 'astro:assets';
+import Demo from '../components/Demo.astro';
+import mascot from '../../../assets/bonequinho.png';
+import '@fontsource/besley/latin-400.css';
+import '@fontsource/besley/latin-400-italic.css';
+import '@fontsource/besley/latin-600.css';
+import '@fontsource/besley/latin-600-italic.css';
+import '@fontsource/geist/latin-400.css';
+import '@fontsource/geist/latin-500.css';
+import '@fontsource/geist/latin-600.css';
+import '../styles/global.css';
+
+const favicon = await getImage({ src: mascot, width: 48, format: 'png' });
+const repository = 'https://github.com/xinnaider/breve';
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#FBF9F4" />
+    <meta name="description" content="Seu parceiro de estudo no Mac. O Breve traz pequenas descobertas para o seu dia. Você aprende aos poucos, quase sem perceber." />
+    <meta property="og:title" content="Breve · Seu parceiro de estudo" />
+    <meta property="og:description" content="O que você quer aprender hoje? Pequenas descobertas no canto do seu Mac, no seu ritmo." />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <title>Breve · Seu parceiro de estudo</title>
+    <link rel="icon" href={favicon.src} type="image/png" />
+  </head>
+  <body>
+    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+    <header class="header wrap">
+      <a class="brand" href="./" aria-label="Breve, início">
+        <Image src={mascot} alt="" width={32} height={33} loading="eager" />
+        <span>Breve</span>
+      </a>
+      <nav aria-label="Navegação principal">
+        <a class="nav-link" href={repository}>GitHub</a>
+        <button class="button button-small button-outline" data-install>Instalar</button>
+      </nav>
+    </header>
+
+    <main id="conteudo">
+      <section class="hero wrap" aria-labelledby="hero-title">
+        <h1 id="hero-title">O que você quer<br><em>aprender hoje?</em></h1>
+        <p class="intro">Cansou de estudar sempre do mesmo jeito? O Breve traz pequenas descobertas para o seu dia. Você aprende aos poucos, quase sem perceber.</p>
+        <div class="hero-actions"><button class="button primary" data-install>Instalar no Mac</button><a class="button button-outline" href={repository}>GitHub</a></div>
+        <p class="hero-note">Feito para o Mac. Open source.</p>
+      </section>
+
+      <Demo />
+
+    </main>
+    <dialog id="install-modal" aria-labelledby="install-title">
+      <button class="modal-close" aria-label="Fechar instalação" autofocus>×</button>
+      <p class="eyebrow">Breve no seu Mac</p>
+      <h2 id="install-title">Ainda não há instalador publicado.</h2>
+      <p class="install-last">O Homebrew e o zip de release ainda não existem. O código está no GitHub para quem quiser compilar no Mac.</p>
+      <p class="install-last">Atualizar pelo app (Sparkle) só instala depois da sua confirmação, e só quando houver um pacote no feed.</p>
+      <div class="command-row"><code id="brew-command">cd macos && xcodegen generate && xcodebuild -scheme Petzinho -configuration Debug -derivedDataPath ./DerivedData -destination 'platform=macOS' build</code><button id="copy-command" aria-label="Copiar comando">Copiar</button></div>
+      <p id="copy-status" role="status" aria-live="polite"></p>
+      <a class="brew-help" href={repository} target="_blank" rel="noreferrer">Abrir o repositório no GitHub</a>
+    </dialog>
+  </body>
+</html>

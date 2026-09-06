@@ -1,9 +1,8 @@
 cask "breve" do
-  version "1.0.1"
-  sha256 "7fc618fae16d098b5d1679bc939983cbf8f679eb99a17d1bd83f5a8c5190a3f9"
+  version "1.0.2"
+  sha256 "aa540a6cb4fb07b4e1d81e3b49d51689ca41d34d9b54d0866001d9905a6c285e"
 
-  url "https://github.com/xinnaider/breve/releases/download/v#{version}/Breve.zip",
-      verified: "github.com/xinnaider/breve/"
+  url "https://github.com/xinnaider/breve/releases/download/v#{version}/Breve.zip"
   name "Breve"
   desc "Parceiro de estudo no canto da tela"
   homepage "https://breve.jfernando.dev/"

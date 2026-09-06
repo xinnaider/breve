@@ -21,6 +21,7 @@ Preferências do usuário (`breve.config.v1`) ficam fora do `.app` e sobrevivem 
 O cask `xinnaider/breve/breve` tem `auto_updates true`:
 
 - `brew install --cask` coloca o `.app` em Aplicativos.
+- Se o Homebrew já tem o receipt e o app não está em Aplicativos, veja [Instalar](instalar.md).
 - O Sparkle atualiza esse mesmo bundle, com confirmação.
 - `brew upgrade` normal não substitui um cask com `auto_updates true`.
 - `brew upgrade --cask --greedy breve` pode sobrescrever com o artefato do cask.

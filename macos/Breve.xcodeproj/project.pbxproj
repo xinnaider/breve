@@ -340,11 +340,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_STANDALONE_ICON_BEHAVIOR = all;
 				CODE_SIGN_ENTITLEMENTS = Breve.entitlements;
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEAD_CODE_STRIPPING = YES;
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_LIBRARY_VALIDATION = NO;
@@ -354,7 +355,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.2;
 				OTHER_CFLAGS = "$(inherited) -ffile-prefix-map=$(SRCROOT)=/breve -ffile-prefix-map=$(HOME)=/home -fdebug-prefix-map=$(SRCROOT)=/breve -fdebug-prefix-map=$(HOME)=/home";
 				OTHER_SWIFT_FLAGS = "$(inherited) -file-prefix-map $(SRCROOT)=/breve -file-prefix-map $(HOME)=/home -debug-prefix-map $(SRCROOT)=/breve -debug-prefix-map $(HOME)=/home";
 				PRODUCT_BUNDLE_IDENTIFIER = dev.fordevs.breve;
@@ -431,12 +432,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_STANDALONE_ICON_BEHAVIOR = all;
 				CODE_SIGN_ENTITLEMENTS = Breve.entitlements;
 				CODE_SIGN_IDENTITY = "-";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEPLOYMENT_POSTPROCESSING = YES;
@@ -448,7 +450,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.2;
 				OTHER_CFLAGS = "$(inherited) -ffile-prefix-map=$(SRCROOT)=/breve -ffile-prefix-map=$(HOME)=/home -fdebug-prefix-map=$(SRCROOT)=/breve -fdebug-prefix-map=$(HOME)=/home";
 				OTHER_SWIFT_FLAGS = "$(inherited) -file-prefix-map $(SRCROOT)=/breve -file-prefix-map $(HOME)=/home -debug-prefix-map $(SRCROOT)=/breve -debug-prefix-map $(HOME)=/home";
 				PRODUCT_BUNDLE_IDENTIFIER = dev.fordevs.breve;

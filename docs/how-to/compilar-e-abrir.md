@@ -6,6 +6,8 @@ updated: 2026-09-04
 
 # Compilar e abrir
 
+Para instalar o Release no dia a dia, use [Instalar](instalar.md) (`./build.sh`). Abaixo é o ciclo Debug de desenvolvimento.
+
 Requer Xcode, XcodeGen e macOS 14+.
 
 ```bash

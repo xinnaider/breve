@@ -35,6 +35,7 @@ sparkle_private*
 *.dmg
 /build/
 /reports/
+/app/Breve.app
 
 # Compose real deste host (use compose.example.yaml no repositório público)
 /docker-compose.yml

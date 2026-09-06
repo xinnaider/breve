@@ -18,6 +18,6 @@ Fundo creme, títulos em Besley (servida localmente) e acentos laranja. O mockup
 
 O papel de parede está em `src/assets/desktop-wallpaper.png`. O Astro entrega versões WebP responsivas.
 
-O repositório público é `https://github.com/xinnaider/breve`. Não há cask Homebrew publicado e não existe GitHub Release com zip ou dmg. O modal de instalação aponta para o comando real de compilação.
+O repositório público é `https://github.com/xinnaider/breve`. O modal de instalação aponta para o `install.sh` (clone + build local).
 
 Para servir a imagem Docker na sua máquina, veja `compose.example.yaml` na raiz do repositório.

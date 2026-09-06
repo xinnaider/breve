@@ -11,15 +11,25 @@ Seu parceiro de estudo no Mac. Um mascote na borda da tela traz notas curtas e p
 
 ## Instalar
 
-No Mac com macOS 14 ou mais recente e Apple Silicon, com [Homebrew](https://brew.sh):
+O app é compilado **neste Mac**. Assim o Gatekeeper não trata o Breve como um download da internet.
+
+Requisitos: macOS 14+, Apple Silicon, [Xcode](https://developer.apple.com/xcode/) e [XcodeGen](https://github.com/yonaskolb/XcodeGen) (`brew install xcodegen`).
 
 ```bash
-brew tap xinnaider/breve https://github.com/xinnaider/breve
-brew install --cask xinnaider/breve/breve
+curl -fsSL https://raw.githubusercontent.com/xinnaider/breve/main/install.sh | bash
+```
+
+Ou manualmente:
+
+```bash
+git clone https://github.com/xinnaider/breve.git
+cd breve
+./build.sh
+open app/Breve.app
 ```
 
 Site: [breve.jfernando.dev](https://breve.jfernando.dev)
 
 Código: [github.com/xinnaider/breve](https://github.com/xinnaider/breve)
 
-Se o macOS pedir confirmação na primeira abertura: [docs/how-to/instalar.md](docs/how-to/instalar.md). Para compilar a partir do código: [docs/how-to/compilar-e-abrir.md](docs/how-to/compilar-e-abrir.md).
+Ajuda: [docs/how-to/instalar.md](docs/how-to/instalar.md). Desenvolvimento Debug: [docs/how-to/compilar-e-abrir.md](docs/how-to/compilar-e-abrir.md).

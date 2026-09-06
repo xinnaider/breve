@@ -1,30 +1,30 @@
 ---
 title: Instalar
-tags: [how-to, homebrew]
+tags: [how-to, macos, build]
 updated: 2026-09-06
 ---
 
 # Instalar
 
-No Mac com macOS 14 ou mais recente, Apple Silicon e [Homebrew](https://brew.sh):
+O Breve é compilado no seu Mac (mesmo modelo do [Interruptor](https://github.com/xinnaider/interruptor)): o `.app` não vem baixado da internet, então o Gatekeeper não mostra *A Apple não pôde verificar…*.
+
+Requisitos: macOS 14+, Apple Silicon, Xcode e XcodeGen (`brew install xcodegen`).
 
 ```bash
-brew tap xinnaider/breve https://github.com/xinnaider/breve
-brew install --cask xinnaider/breve/breve
+curl -fsSL https://raw.githubusercontent.com/xinnaider/breve/main/install.sh | bash
 ```
 
-O app fica em Aplicativos. Atualizações pelo próprio Breve só instalam depois da sua confirmação.
+O script clona para `~/.local/src/breve`, gera o Release e copia para `/Applications/Breve.app`.
 
-Se o Homebrew disser que a versão já está instalada mas o `.app` não está em Aplicativos, o receipt ficou sem o arquivo. `brew install` não restaura nesse caso:
+Manualmente, a partir do repositório:
 
 ```bash
-brew reinstall --cask xinnaider/breve/breve
+git clone https://github.com/xinnaider/breve.git
+cd breve
+./build.sh
+open app/Breve.app
 ```
 
-## Primeira abertura
+Para atualizar: rode de novo o `install.sh`, ou `git pull` e `./build.sh` na pasta do clone.
 
-1. No Finder, abra **Aplicativos → Breve**. Não desative Gatekeeper nem remova a quarentena.
-2. Se o macOS recusar o app não identificado, em **Ajustes do Sistema → Privacidade e Segurança** clique em **Abrir Mesmo**.
-3. Confirme **Abrir** no diálogo seguinte.
-
-O Spotlight e o Launch Services só passam a achar o app depois que ele existe de novo em Aplicativos.
+Não desative o Gatekeeper nem remova quarentena de outros apps. Um zip ou cask baixado da internet continua sujeito ao diálogo da Apple; o caminho suportado é este build local.

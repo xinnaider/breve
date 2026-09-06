@@ -1,30 +1,30 @@
 ---
 title: Atualizar o Breve
-tags: [how-to, sparkle, homebrew]
-updated: 2026-09-04
+tags: [how-to, sparkle]
+updated: 2026-09-06
 ---
 
 # Atualizar o Breve
 
-O app usa [Sparkle 2.9](https://sparkle-project.org/documentation/) para procurar e instalar atualizações. `SUAutomaticallyUpdate` e `SUAllowsAutomaticUpdates` ficam desligados: o Sparkle pode checar sozinho, mas só instala depois do diálogo de confirmação.
+Instalação pelo `install.sh` / `./build.sh`: atualize com o **mesmo comando**. O script faz `git pull`, recompila neste Mac e substitui `/Applications/Breve.app`.
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/xinnaider/breve/main/install.sh | bash
+```
+
+Ou, no clone:
+
+```bash
+git pull
+./build.sh
+open app/Breve.app
+```
+
+Preferências (`breve.config.v1`) ficam fora do `.app` e sobrevivem.
 
 ## No app
 
-1. Ícone ao lado dos idiomas no cabeçalho, botão direito no pet, ou menu da barra.
-2. O clique abre o diálogo do Sparkle. Sem pacote no feed: estado "sem atualização" (canal vazio) ou erro (feed inacessível).
-3. Se houver versão nova, confirme no Sparkle antes de substituir o bundle e reabrir.
-
-Preferências do usuário (`breve.config.v1`) ficam fora do `.app` e sobrevivem a essa troca.
-
-## Homebrew
-
-O cask `xinnaider/breve/breve` tem `auto_updates true`:
-
-- `brew install --cask` coloca o `.app` em Aplicativos.
-- Se o Homebrew já tem o receipt e o app não está em Aplicativos, veja [Instalar](instalar.md).
-- O Sparkle atualiza esse mesmo bundle, com confirmação.
-- `brew upgrade` normal não substitui um cask com `auto_updates true`.
-- `brew upgrade --cask --greedy breve` pode sobrescrever com o artefato do cask.
+O ícone ao lado dos idiomas ainda pode consultar o feed Sparkle (zip no GitHub). Esse pacote **é** um download e o macOS pode recusar. O caminho suportado sem o diálogo da Apple é recompilar localmente, como acima.
 
 ## Publicar um pacote
 

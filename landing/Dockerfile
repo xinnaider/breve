@@ -4,6 +4,7 @@ COPY landing/package.json landing/package-lock.json /src/landing/
 RUN cd /src/landing && npm ci
 COPY assets /src/assets
 COPY content/development.pt.yaml content/development.en.yaml /src/content/
+COPY macos/Assets.xcassets/AppIcon.appiconset/icon_256.png /src/macos/Assets.xcassets/AppIcon.appiconset/icon_256.png
 COPY landing /src/landing
 RUN cd /src/landing && npm run build
 

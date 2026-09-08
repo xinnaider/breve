@@ -22,7 +22,7 @@ export function setupInstall(root) {
     if (!button || !status) return;
     button.textContent = "Copiado";
     button.setAttribute("aria-label", "Copiado");
-    status.textContent = "Copiado";
+    status.textContent = "";
     window.setTimeout(() => {
       button.textContent = "Copiar comando";
       button.setAttribute("aria-label", "Copiar comando");

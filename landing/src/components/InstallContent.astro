@@ -1,0 +1,19 @@
+---
+import {INSTALL_CMD, SCRIPT_URL, HELP_URL} from '../data/conceitos.js';
+---
+<div class="install-content" data-install-root>
+  <header><p class="eyebrow">BREVE PARA MAC</p><h2 id="install-title">Leve o Breve para o seu Mac.</h2><p class="instruction">Copie o comando e cole no Terminal do seu Mac.</p></header>
+  <section aria-label="Comando de instalação">
+    <label for="install-cmd">Comando de instalação</label>
+    <div class="command-frame">
+      <textarea id="install-cmd" data-install-cmd readonly spellcheck="false" rows="3">{INSTALL_CMD}</textarea>
+      <button data-copy type="button" aria-live="polite">Copiar comando</button>
+    </div>
+    <p class="copy-status" data-copy-status role="status" aria-live="polite"></p>
+  </section>
+  <p class="requirements">Apple Silicon · macOS 14+<br/><span>Requer Xcode e XcodeGen instalados.</span></p>
+  <footer><a href={SCRIPT_URL} target="_blank" rel="noreferrer">Ver o script ↗</a><a href={HELP_URL} target="_blank" rel="noreferrer">Ajuda para instalar ↗</a></footer>
+</div>
+<style>
+.install-content{padding:28px;font-family:Geist,-apple-system,sans-serif;color:#eee;display:flex;flex-direction:column;gap:20px}.eyebrow{font-size:9px;letter-spacing:1.5px;color:#a7a8ad;margin:0 0 10px}.install-content h2{font:500 25px/1.2 Geist,sans-serif;letter-spacing:-.8px;margin:0 0 10px}.instruction{font-size:13px;line-height:1.6;color:#b4b5bb;margin:0}label{display:block;font-size:11px;color:#bbbcc2;margin-bottom:8px}.command-frame{background:#161618;border:1px solid #444448;border-radius:8px;padding:12px}textarea{width:100%;display:block;background:transparent;color:#efeff1;border:0;resize:none;font:12px/1.7 ui-monospace,SFMono-Regular,monospace;word-break:break-all;padding:0;outline-offset:5px}button{display:block;width:100%;background:#f1f1ef;color:#202022;font:500 12px Geist,sans-serif;border:0;border-radius:5px;min-height:36px;padding:8px 12px;margin-top:10px;cursor:pointer}.copy-status{font-size:11px;color:#b2dfba;margin:6px 0 0}.copy-status:empty{display:none}.requirements{font-size:11px;line-height:1.65;color:#a4a5aa;margin:0}.requirements span{color:#bdbec4}footer{display:flex;gap:20px;flex-wrap:wrap}footer a{font-size:11px;color:#d5d6dc;text-decoration:underline;text-underline-offset:3px;min-height:28px;display:flex;align-items:center}a:focus-visible,button:focus-visible,textarea:focus-visible{outline:2px solid #a8caff;outline-offset:4px}@media(max-width:550px){.install-content{padding:22px}}
+</style>

@@ -539,3 +539,7 @@ textarea:focus-visible {
 .study-card[lang='en'] [data-note-expl]:not([hidden]):before{content:'EXPLANATION'}
 @media(min-width:769px){.hero-window{max-height:calc(100dvh - 150px);overflow:auto}.hero-chrome{position:sticky;top:0;z-index:2;backdrop-filter:blur(20px)}}
 @media(min-width:769px) and (max-height:700px){.hero-window{top:48px;max-height:calc(100dvh - 148px)}.hero-body{padding:20px 26px}.hero-window h1{font-size:38px}.hero-brand{margin-bottom:14px}.hero-lead{margin:16px 0}.hero-sign{margin-top:16px}}
+/* Selected installation content: command first, matching the dark hero window. */
+.install-dlg{background:#252527f5;color:#eee;border:1px solid #ffffff30}
+.install-dlg>.hero-chrome{height:40px;min-height:40px;background:#303033;border-bottom:1px solid #ffffff10;padding:0 12px}
+.install-dlg .hero-titlebar{color:#aaa;font-weight:400;font-size:12px}

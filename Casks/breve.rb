@@ -8,11 +8,12 @@ cask "breve" do
   homepage "https://breve.jfernando.dev/"
 
   livecheck do
-    url :url
-    strategy :github_latest
+    skip "Legacy ZIP; current releases use the source installer"
   end
 
-  auto_updates true
+  # Canal suportado: compilação da tag publicada (install.sh / atualizador do app).
+  # Este zip é o pacote Sparkle legado 1.0.2; auto_updates desligado.
+  auto_updates false
   depends_on macos: :sonoma
   depends_on arch: :arm64
 

@@ -10,7 +10,7 @@ macos/*.xcodeproj/project.xcworkspace/xcuserdata/
 *.moved-aside
 
 # YAML no bundle é cópia do content/ no pre-build
-macos/Resources/*.yaml
+macos/Resources/
 
 # Astro landing
 landing/node_modules/
@@ -63,3 +63,7 @@ content/development.yaml
 /assets/pixel/
 /assets/style-ref.jpg
 /assets/petzinho-idle.png
+
+# Explorações locais de instalação
+landing/src/components/conceitos/InstallMockup.astro
+landing/src/pages/heroes/install/

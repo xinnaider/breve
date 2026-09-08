@@ -1,30 +1,23 @@
----
-title: Instalar
-tags: [how-to, macos, build]
-updated: 2026-09-06
----
+# Instalar o Breve
 
-# Instalar
-
-O Breve é compilado no seu Mac (mesmo modelo do [Interruptor](https://github.com/xinnaider/interruptor)): o `.app` não vem baixado da internet, então o Gatekeeper não mostra *A Apple não pôde verificar…*.
-
-Requisitos: macOS 14+, Apple Silicon, Xcode e XcodeGen (`brew install xcodegen`).
+Requisitos: Apple Silicon, macOS 14+, Xcode e XcodeGen (`brew install xcodegen`). O instalador precisa de permissão de escrita em `/Applications` e não executa sudo.
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/xinnaider/breve/main/install.sh | bash
 ```
 
-O script clona para `~/.local/src/breve`, gera o Release e copia para `/Applications/Breve.app`.
+[Leia o script antes de executar](../../install.sh). O script em `main` busca a release estável publicada, baixa o código dessa tag e compila o app neste Mac. O código do app instalado não acompanha cada commit de `main`.
 
-Manualmente, a partir do repositório:
+O app é instalado em `/Applications/Breve.app`. O cache de compilação fica em `~/Library/Caches/dev.fordevs.breve/src.noindex`. A instalação preserva as preferências e prepara a cópia nova antes de substituir a anterior.
+
+Para compilar um checkout local:
 
 ```bash
 git clone https://github.com/xinnaider/breve.git
 cd breve
-./build.sh
-open app/Breve.app
+./install.sh --local
 ```
 
-Para atualizar: rode de novo o `install.sh`, ou `git pull` e `./build.sh` na pasta do clone.
+Para apenas compilar, use `./build.sh` e abra com `open app/Breve.app`.
 
-Não desative o Gatekeeper nem remova quarentena de outros apps. Um zip ou cask baixado da internet continua sujeito ao diálogo da Apple; o caminho suportado é este build local.
+O cask e o ZIP da versão 1.0.2 usam o atualizador antigo. Reinstale pelo comando acima para migrar para o atualizador por compilação local. Não é necessário apagar suas preferências.

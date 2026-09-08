@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Empacota Breve.app (Release) em zip para GitHub Release e generate_appcast.
+# Empacota Breve.app (Release) em zip para testes manuais; não alimenta o atualizador.
 # Assinatura Apple Developer ID / notarização não entram neste passo.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -30,4 +30,4 @@ PY
 echo "zip: $OUT"
 ls -lh "$OUT"
 shasum -a 256 "$OUT"
-echo "Gere o appcast fora deste git; não commite o zip nem a chave EdDSA."
+echo "ZIP para distribuição manual. O atualizador do app usa o código da release."

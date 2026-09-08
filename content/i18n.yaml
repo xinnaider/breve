@@ -41,10 +41,16 @@ widget.close:
   en: Close note
 widget.more:
   pt: Ver mais
-  en: See more
+  en: Read more
 widget.collapse:
-  pt: Recolher
-  en: Collapse
+  pt: Ver menos
+  en: Read less
+widget.show_explain:
+  pt: Ver explicação
+  en: Show explanation
+widget.hide_explain:
+  pt: Ocultar explicação
+  en: Hide explanation
 widget.quiz:
   pt: Questionário
   en: Quiz
@@ -227,27 +233,39 @@ setup.update.icon.available:
 setup.update.icon.checking:
   pt: Procurando atualização
   en: Checking for updates
+setup.update.icon.compiling:
+  pt: Compilando atualização
+  en: Compiling update
 setup.update.title:
   pt: Atualizações
   en: Updates
 setup.update.hint:
-  pt: O Breve avisa quando houver uma versão nova. Nada é instalado sem a sua confirmação.
-  en: Breve lets you know when a new version is available. Nothing is installed without your confirmation.
+  pt: O Breve consulta a versão publicada no GitHub. Nada é instalado sem a sua confirmação. A compilação neste Mac leva alguns minutos.
+  en: Breve checks the published GitHub release. Nothing is installed without your confirmation. Compiling on this Mac takes a few minutes.
 setup.update.current:
   pt: "Versão instalada: {version} ({build})"
   en: "Installed version: {version} ({build})"
 setup.update.check:
   pt: Procurar atualização
   en: Check for updates
-setup.update.install:
-  pt: Instalar e reabrir
-  en: Install and reopen
+setup.update.action:
+  pt: Atualizar
+  en: Update
+setup.update.later:
+  pt: Depois
+  en: Later
+setup.update.ok:
+  pt: OK
+  en: OK
 setup.update.idle:
-  pt: Toque em Procurar atualização para conferir o feed.
-  en: Tap Check for updates to query the feed.
+  pt: Toque em Procurar atualização para conferir a versão publicada.
+  en: Tap Check for updates to query the published release.
 setup.update.checking:
   pt: Procurando atualização...
   en: Checking for updates...
+setup.update.compiling:
+  pt: Compilando neste Mac…
+  en: Compiling on this Mac…
 setup.update.none:
   pt: Você já está na versão mais recente ({version}).
   en: You are already on the latest version ({version}).
@@ -255,14 +273,77 @@ setup.update.available:
   pt: "Versão {version} ({build}) disponível."
   en: "Version {version} ({build}) is available."
 setup.update.error:
-  pt: "Não deu para conferir: {message}"
-  en: "Could not check: {message}"
+  pt: "Não deu: {message}"
+  en: "Could not update: {message}"
+setup.update.error_title:
+  pt: A atualização não concluiu
+  en: The update did not finish
 setup.update.confirm:
-  pt: O instalador pede confirmação antes de substituir o app e reabrir.
-  en: The installer asks for confirmation before replacing the app and reopening.
+  pt: Depois de confirmar, o Breve baixa o código da tag, compila neste Mac (minutos) e só então substitui o app.
+  en: After you confirm, Breve downloads the tagged source, compiles on this Mac (minutes), then replaces the app.
 setup.update.confirm_title:
-  pt: Instalar esta versão e reabrir o Breve?
-  en: Install this version and reopen Breve?
+  pt: Compilar esta versão neste Mac e reabrir o Breve?
+  en: Compile this version on this Mac and reopen Breve?
+setup.update.minutes:
+  pt: "A versão {version} será baixada da release publicada, compilada neste Mac e instalada em Aplicativos. Isso leva alguns minutos — não é instantâneo. Preferências são preservadas. Se algo falhar, a versão atual permanece."
+  en: "Version {version} will be downloaded from the published release, compiled on this Mac, and installed into Applications. This takes a few minutes — it is not instant. Preferences are kept. If anything fails, the current version stays."
+setup.update.progress_title:
+  pt: Atualizando o Breve
+  en: Updating Breve
+setup.update.progress_detail:
+  pt: "Compilando {version} neste Mac. Leva alguns minutos."
+  en: "Compiling {version} on this Mac. This takes a few minutes."
+setup.update.progress_download:
+  pt: Baixando o código da tag publicada…
+  en: Downloading the published tagged source…
+setup.update.progress_extract:
+  pt: Conferindo origem e extraindo…
+  en: Checking origin and extracting…
+setup.update.progress_compile:
+  pt: Compilando (isso não é instantâneo)…
+  en: Compiling (this is not instant)…
+setup.update.progress_apply:
+  pt: Instalando e reabrindo…
+  en: Installing and reopening…
 setup.update.brew:
-  pt: Se um dia o cask do Homebrew tiver auto_updates, o Sparkle atualiza o app em Aplicativos. O brew upgrade normal não substitui esse app.
-  en: If a Homebrew cask is later published with auto_updates, Sparkle updates the app in Applications. A normal brew upgrade will not replace that app.
+  pt: O cask do Homebrew ainda aponta para o zip antigo. O caminho suportado é compilar a tag publicada neste Mac (install.sh ou o ícone de atualização).
+  en: The Homebrew cask still points at the old zip. The supported path is compiling the published tag on this Mac (install.sh or the update icon).
+update.error.busy:
+  pt: Já há uma atualização em andamento.
+  en: An update is already running.
+update.error.invalid_release:
+  pt: Não consegui ler a release estável publicada.
+  en: The published stable release could not be read.
+update.error.prerelease:
+  pt: A última entrada no GitHub é pré-release, não uma tag estável.
+  en: The latest GitHub item is a prerelease, not a stable tag.
+update.error.origin:
+  pt: "Recusei o download de {url}."
+  en: "Refusing to download from {url}."
+update.error.version:
+  pt: "A versão compilada ({found}) não é a publicada ({expected})."
+  en: "Compiled version {found} does not match published {expected}."
+update.error.bundle_id:
+  pt: "O bundle id {found} não é dev.fordevs.breve."
+  en: "Bundle id {found} is not dev.fordevs.breve."
+update.error.executable:
+  pt: O app compilado veio sem executável.
+  en: The compiled app has no executable.
+update.error.signature:
+  pt: O app compilado não está com assinatura ad-hoc local.
+  en: The compiled app is not a local ad-hoc build.
+update.error.writable:
+  pt: "Sem permissão de escrita em {path}. Não vou usar sudo."
+  en: "Cannot write {path}. No sudo will be attempted."
+update.error.xcode:
+  pt: Precisa do Xcode (xcode-select apontando para Xcode.app).
+  en: Xcode is required (xcode-select must point at Xcode.app).
+update.error.xcodegen:
+  pt: Precisa do XcodeGen (brew install xcodegen).
+  en: XcodeGen is required (brew install xcodegen).
+update.error.timeout:
+  pt: O app não encerrou a tempo. A versão instalada não foi alterada.
+  en: The running app did not exit in time. The installed copy was left unchanged.
+update.error.failed:
+  pt: "{message}"
+  en: "{message}"

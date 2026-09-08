@@ -86,12 +86,12 @@ final class WidgetPanelController {
             let headline = session.tipKind == .info ? card.verso : card.frente
             let estimated = Theme.estimatedPanelSize(
                 card: card,
-                deep: session.bubbleDeep || session.quizPick != nil,
+                deep: session.bubbleDeep,
                 edge: session.dock.edge,
                 headline: headline,
                 quizVisible: session.tipKind == .quiz
             )
-            if session.bubbleDeep || session.quizPick != nil {
+            if session.bubbleDeep {
                 next = CGSize(
                     width: max(size.width, estimated.width),
                     height: max(size.height, estimated.height)
@@ -384,7 +384,8 @@ final class WidgetPanelController {
         if didMove, let live = livePetOrigin {
             let screen = screen(for: NSEvent.mouseLocation)
             let visible = screen.visibleFrame
-            let snapped = DockAnchor.snap(petOrigin: live, visible: visible)
+            var snapped = DockAnchor.snap(petOrigin: live, visible: visible)
+            snapped.displayUUID = screen.breveDisplayUUID
             livePetOrigin = nil
             Session.shared.setDock(snapped)
         } else {
@@ -524,12 +525,15 @@ final class WidgetPanelController {
 
     private func screen(forPet dock: DockAnchor) -> NSScreen {
         let screens = NSScreen.screens
-        guard let main = NSScreen.main ?? screens.first else {
+        if let uuid = dock.displayUUID,
+           let saved = screens.first(where: { $0.breveDisplayUUID == uuid }) {
+            return saved
+        }
+        // A disconnected display falls back without erasing the saved destination.
+        guard let primary = screens.first else {
             preconditionFailure("macOS always has a screen")
         }
-        let guess = dock.petRect(in: main.visibleFrame)
-        let center = NSPoint(x: guess.midX, y: guess.midY)
-        return screens.first { $0.frame.insetBy(dx: -40, dy: -40).contains(center) } ?? main
+        return primary
     }
 
     private func screen(for point: NSPoint) -> NSScreen {
@@ -554,7 +558,7 @@ final class WidgetPanelController {
             let headline = session.tipKind == .info ? card.verso : card.frente
             let estimated = Theme.estimatedPanelSize(
                 card: card,
-                deep: session.bubbleDeep || session.quizPick != nil,
+                deep: session.bubbleDeep,
                 edge: session.dock.edge,
                 headline: headline,
                 quizVisible: session.tipKind == .quiz

@@ -1,10 +1,10 @@
+import AppKit
 import Foundation
 import Observation
-import Sparkle
 
 @MainActor
 @Observable
-final class AppUpdater: NSObject, SPUUpdaterDelegate {
+final class AppUpdater {
     static let shared = AppUpdater()
 
     enum Status: Equatable {
@@ -12,47 +12,86 @@ final class AppUpdater: NSObject, SPUUpdaterDelegate {
         case checking
         case upToDate
         case available(version: String, build: String)
+        case compiling(version: String)
+        case applying
         case error(String)
     }
 
     private(set) var status: Status = .idle
-    private(set) var canCheck = false
+    private(set) var canCheck = true
     let currentVersion: String
     let currentBuild: String
 
-    private var updater: SPUUpdater?
-    private var canCheckObservation: NSKeyValueObservation?
-    private var statusBeforeCycle: Status = .idle
+    var destination: URL
+    var client: ReleaseClient
+    var compiler: SourceCompiler
+    private var found: PublishedRelease?
+    private var work: Task<Void, Never>?
+    private let progress = UpdateProgressWindow()
 
-    override init() {
-        let info = Bundle.main.infoDictionary
+    init(
+        bundle: Bundle = .main,
+        destination: URL = AppUpdater.defaultDestination,
+        client: ReleaseClient = ReleaseClient(),
+        compiler: SourceCompiler = SourceCompiler()
+    ) {
+        let info = bundle.infoDictionary
         currentVersion = info?["CFBundleShortVersionString"] as? String ?? "0"
         currentBuild = info?["CFBundleVersion"] as? String ?? "0"
-        super.init()
+        self.destination = destination
+        self.client = client
+        self.compiler = compiler
     }
 
-    func attach(_ updater: SPUUpdater) {
-        canCheckObservation?.invalidate()
-        self.updater = updater
-        updater.automaticallyDownloadsUpdates = false
-        canCheckObservation = updater.observe(\.canCheckForUpdates, options: [.initial, .new]) { [weak self] _, change in
-            guard let value = change.newValue else { return }
-            Task { @MainActor in
-                self?.canCheck = value
+    static var defaultDestination: URL {
+        if let override = ProcessInfo.processInfo.environment["BREVE_DEST"], !override.isEmpty {
+            return URL(fileURLWithPath: override)
+        }
+        return URL(fileURLWithPath: "/Applications/Breve.app")
+    }
+
+    func start() {
+        Task {
+            await probe()
+            if case .available = status {
+                confirmInstall()
             }
         }
     }
 
-    func probe() {
-        guard let updater, updater.canCheckForUpdates else { return }
-        beginCycle()
-        updater.checkForUpdateInformation()
+    func probe() async {
+        guard canStartCheck else { return }
+        status = .checking
+        refreshCanCheck()
+        do {
+            let release = try await client.fetchLatest()
+            found = release
+            if release.isNewer(than: currentVersion) {
+                status = .available(version: release.marketingVersion, build: release.tag)
+            } else {
+                status = .upToDate
+            }
+        } catch {
+            found = nil
+            status = .error(Self.message(error))
+        }
+        refreshCanCheck()
     }
 
     func present() {
-        guard let updater, updater.canCheckForUpdates else { return }
-        beginCycle()
-        updater.checkForUpdates()
+        switch status {
+        case .compiling, .applying:
+            progress.orderFront()
+        case .available:
+            confirmInstall()
+        default:
+            Task {
+                await probe()
+                if case .available = status {
+                    confirmInstall()
+                }
+            }
+        }
     }
 
     func menuTitle(t: (String) -> String) -> String {
@@ -65,53 +104,209 @@ final class AppUpdater: NSObject, SPUUpdaterDelegate {
             t("menu.update.none")
         case .checking:
             t("setup.update.checking")
+        case .compiling, .applying:
+            t("setup.update.compiling")
         case .idle:
             t("menu.update")
         }
     }
 
-    func updater(_ updater: SPUUpdater, didFindValidUpdate item: SUAppcastItem) {
-        status = .available(version: item.displayVersionString, build: item.versionString)
-    }
-
-    func updaterDidNotFindUpdate(_ updater: SPUUpdater) {
-        status = .upToDate
-    }
-
-    func updater(_ updater: SPUUpdater, didAbortWithError error: Error) {
-        applySparkleError(error, keepSelectionOnCancel: true)
-    }
-
-    func updater(_ updater: SPUUpdater, didFinishUpdateCycleFor updateCheck: SPUUpdateCheck, error: Error?) {
-        canCheck = updater.canCheckForUpdates
-        if let error {
-            applySparkleError(error, keepSelectionOnCancel: true)
-        } else if case .checking = status {
-            status = .upToDate
+    private var canStartCheck: Bool {
+        switch status {
+        case .checking, .compiling, .applying: false
+        default: true
         }
-        _ = updateCheck
     }
 
-    private func beginCycle() {
-        statusBeforeCycle = status
-        status = .checking
+    private func refreshCanCheck() {
+        switch status {
+        case .checking, .compiling, .applying:
+            canCheck = false
+        default:
+            canCheck = true
+        }
     }
 
-    private func applySparkleError(_ error: Error, keepSelectionOnCancel: Bool) {
-        let ns = error as NSError
-        if ns.domain == SUSparkleErrorDomain {
-            switch ns.code {
-            case Int(SUError.noUpdateError.rawValue):
-                status = .upToDate
-            case Int(SUError.installationCanceledError.rawValue):
-                if keepSelectionOnCancel, case .checking = status {
-                    status = statusBeforeCycle
+    private func confirmInstall() {
+        guard case .available(let version, _) = status else { return }
+        let alert = NSAlert()
+        alert.alertStyle = .informational
+        alert.messageText = Session.shared.t("setup.update.confirm_title")
+        alert.informativeText = Session.shared.t("setup.update.minutes", ["version": version])
+        alert.addButton(withTitle: Session.shared.t("setup.update.action"))
+        alert.addButton(withTitle: Session.shared.t("setup.update.later"))
+        NSApp.activate(ignoringOtherApps: true)
+        let response = alert.runModal()
+        if response == .alertFirstButtonReturn {
+            beginCompile()
+        }
+        // Depois: status stays .available
+    }
+
+    private func beginCompile() {
+        guard let release = found else { return }
+        status = .compiling(version: release.marketingVersion)
+        refreshCanCheck()
+        progress.show(
+            title: Session.shared.t("setup.update.progress_title"),
+            detail: Session.shared.t("setup.update.progress_detail", ["version": release.marketingVersion])
+        )
+        work?.cancel()
+        let dest = destination
+        let compiler = compiler
+        let client = client
+        let labels: [String: String] = [
+            "download": Session.shared.t("setup.update.progress_download"),
+            "extract": Session.shared.t("setup.update.progress_extract"),
+            "compile": Session.shared.t("setup.update.progress_compile"),
+        ]
+        work = Task.detached(priority: .userInitiated) {
+            do {
+                let app = try await UpdatePipeline.compilePublished(
+                    release: release,
+                    destination: dest,
+                    client: client,
+                    compiler: compiler,
+                    onProgress: { stage in
+                        let text = labels[stage] ?? stage
+                        Task { @MainActor in
+                            AppUpdater.shared.progress.setDetail(text)
+                        }
+                    }
+                )
+                await MainActor.run {
+                    AppUpdater.shared.applyCompiled(app: app)
                 }
-            default:
-                status = .error(ns.localizedDescription)
+            } catch {
+                await MainActor.run {
+                    AppUpdater.shared.fail(error)
+                }
             }
-            return
         }
-        status = .error(ns.localizedDescription)
+    }
+
+    private func applyCompiled(app: URL) {
+        status = .applying
+        refreshCanCheck()
+        progress.setDetail(Session.shared.t("setup.update.progress_apply"))
+        do {
+            let script = try UpdateHelper.stage()
+            try UpdateHelper.launchDetached(
+                script: script,
+                source: app,
+                destination: destination,
+                pid: ProcessInfo.processInfo.processIdentifier
+            )
+            progress.close()
+            NSApp.terminate(nil)
+        } catch {
+            fail(error)
+        }
+    }
+
+    private func fail(_ error: Error) {
+        progress.close()
+        status = .error(Self.message(error))
+        refreshCanCheck()
+        let alert = NSAlert()
+        alert.alertStyle = .warning
+        alert.messageText = Session.shared.t("setup.update.error_title")
+        alert.informativeText = Self.message(error)
+        alert.addButton(withTitle: Session.shared.t("setup.update.ok"))
+        alert.runModal()
+    }
+
+    static func message(_ error: Error) -> String {
+        let session = Session.shared
+        guard let update = error as? UpdateError else {
+            return error.localizedDescription
+        }
+        switch update {
+        case .busy:
+            return session.t("update.error.busy")
+        case .invalidRelease:
+            return session.t("update.error.invalid_release")
+        case .prerelease:
+            return session.t("update.error.prerelease")
+        case .disallowedURL(let url):
+            return session.t("update.error.origin", ["url": url])
+        case .versionMismatch(let expected, let found):
+            return session.t("update.error.version", ["expected": expected, "found": found])
+        case .bundleIdentifier(let found):
+            return session.t("update.error.bundle_id", ["found": found])
+        case .missingExecutable:
+            return session.t("update.error.executable")
+        case .signature:
+            return session.t("update.error.signature")
+        case .destinationNotWritable(let path):
+            return session.t("update.error.writable", ["path": path])
+        case .missingXcode:
+            return session.t("update.error.xcode")
+        case .missingXcodeGen:
+            return session.t("update.error.xcodegen")
+        case .timeout:
+            return session.t("update.error.timeout")
+        case .installFailed(let message), .rollbackFailed(let message), .network(let message):
+            return session.t("update.error.failed", ["message": message])
+        }
+    }
+}
+
+@MainActor
+final class UpdateProgressWindow {
+    private var window: NSPanel?
+    private let detail = NSTextField(labelWithString: "")
+
+    func show(title: String, detail: String) {
+        if window == nil {
+            let panel = NSPanel(
+                contentRect: NSRect(x: 0, y: 0, width: 420, height: 140),
+                styleMask: [.titled, .utilityWindow],
+                backing: .buffered,
+                defer: false
+            )
+            panel.title = title
+            panel.isReleasedWhenClosed = false
+            panel.level = .floating
+            let spinner = NSProgressIndicator(frame: NSRect(x: 20, y: 88, width: 18, height: 18))
+            spinner.style = .spinning
+            spinner.controlSize = .small
+            spinner.startAnimation(nil)
+            let label = NSTextField(labelWithString: "")
+            label.frame = NSRect(x: 48, y: 86, width: 352, height: 20)
+            label.font = .systemFont(ofSize: 13, weight: .medium)
+            label.stringValue = title
+            self.detail.frame = NSRect(x: 20, y: 20, width: 380, height: 56)
+            self.detail.font = .systemFont(ofSize: 12)
+            self.detail.textColor = .secondaryLabelColor
+            self.detail.maximumNumberOfLines = 3
+            self.detail.lineBreakMode = .byWordWrapping
+            let content = NSView(frame: NSRect(x: 0, y: 0, width: 420, height: 140))
+            content.addSubview(spinner)
+            content.addSubview(label)
+            content.addSubview(self.detail)
+            panel.contentView = content
+            window = panel
+        }
+        window?.title = title
+        self.detail.stringValue = detail
+        orderFront()
+    }
+
+    func setDetail(_ text: String) {
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmed.isEmpty else { return }
+        detail.stringValue = trimmed
+    }
+
+    func orderFront() {
+        guard let window else { return }
+        NSApp.activate(ignoringOtherApps: true)
+        window.center()
+        window.makeKeyAndOrderFront(nil)
+    }
+
+    func close() {
+        window?.orderOut(nil)
     }
 }

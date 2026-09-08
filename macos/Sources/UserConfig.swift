@@ -9,6 +9,7 @@ struct UserConfig: Codable, Equatable {
     var learnQuiz: Bool?
     var learnInfo: Bool?
     var language: String?
+    var dockDisplayUUID: String? = nil
 
     struct Slot: Codable, Equatable {
         var on: Bool

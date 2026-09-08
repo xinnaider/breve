@@ -12,6 +12,7 @@ enum DockEdge: String, Sendable, CaseIterable {
 struct DockAnchor: Equatable, Sendable {
     var edge: DockEdge
     var along: CGFloat
+    var displayUUID: String? = nil
 
     static let fallback = DockAnchor(edge: .right, along: 0.78)
 
@@ -123,5 +124,15 @@ struct DockAnchor: Equatable, Sendable {
                 height: face
             )
         }
+    }
+}
+
+// Display UUID remains stable when macOS reorders the screen list.
+extension NSScreen {
+    var breveDisplayUUID: String? {
+        guard let number = deviceDescription[NSDeviceDescriptionKey("NSScreenNumber")] as? NSNumber,
+              let uuid = CGDisplayCreateUUIDFromDisplayID(number.uint32Value)?.takeRetainedValue()
+        else { return nil }
+        return CFUUIDCreateString(nil, uuid) as String
     }
 }

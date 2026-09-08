@@ -575,7 +575,7 @@ final class Session {
             learnInfo = true
         }
         if let raw = config.dockEdge, let edge = DockEdge(rawValue: raw) {
-            dock = DockAnchor(edge: edge, along: CGFloat(config.dockAlong ?? Double(DockAnchor.fallback.along)))
+            dock = DockAnchor(edge: edge, along: CGFloat(config.dockAlong ?? Double(DockAnchor.fallback.along)), displayUUID: config.dockDisplayUUID)
         } else {
             dock = .fallback
         }
@@ -599,7 +599,8 @@ final class Session {
             dockAlong: Double(dock.along),
             learnQuiz: settingsBackup?.learnQuiz ?? learnQuiz,
             learnInfo: settingsBackup?.learnInfo ?? learnInfo,
-            language: (settingsBackup?.language ?? language).rawValue
+            language: (settingsBackup?.language ?? language).rawValue,
+            dockDisplayUUID: dock.displayUUID
         ).save()
     }
 }

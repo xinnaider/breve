@@ -201,12 +201,17 @@ struct SetupView: View {
     }
 
     private var updateButton: some View {
-        let checking = updater.status == .checking
+        let busy: Bool = {
+            switch updater.status {
+            case .checking, .compiling, .applying: true
+            default: false
+            }
+        }()
         return Button {
             updater.present()
         } label: {
             ZStack {
-                if checking {
+                if busy {
                     ProgressView()
                         .controlSize(.small)
                 } else {
@@ -233,7 +238,7 @@ struct SetupView: View {
         case .available: "arrow.down.circle.fill"
         case .error: "exclamationmark.circle"
         case .upToDate: "checkmark.circle"
-        case .idle, .checking: "arrow.clockwise"
+        case .idle, .checking, .compiling, .applying: "arrow.clockwise"
         }
     }
 
@@ -242,7 +247,7 @@ struct SetupView: View {
         case .available: setupAccent
         case .error: .orange
         case .upToDate: Theme.muted
-        case .idle, .checking: Theme.text
+        case .idle, .checking, .compiling, .applying: Theme.text
         }
     }
 
@@ -266,6 +271,7 @@ struct SetupView: View {
         switch updater.status {
         case .available: session.t("setup.update.icon.available")
         case .checking: session.t("setup.update.icon.checking")
+        case .compiling, .applying: session.t("setup.update.icon.compiling")
         default: session.t("setup.update.icon")
         }
     }
@@ -467,6 +473,10 @@ struct SetupView: View {
             session.t("setup.update.none", ["version": updater.currentVersion])
         case .available(let version, let build):
             session.t("setup.update.available", ["version": version, "build": build])
+        case .compiling(let version):
+            session.t("setup.update.progress_detail", ["version": version])
+        case .applying:
+            session.t("setup.update.progress_apply")
         case .error(let message):
             session.t("setup.update.error", ["message": message])
         }

@@ -159,7 +159,10 @@ private struct SpeechBubble: View {
         kind != .quiz && card.hasExtra
     }
 
-    private var showsChevron: Bool { canToggleDeep }
+    private var showsMoreButton: Bool {
+        if kind == .quiz { return quizPick != nil }
+        return canToggleDeep
+    }
 
     private var tailAlignment: Alignment {
         switch edge {
@@ -190,15 +193,14 @@ private struct SpeechBubble: View {
                 explanation(includeVerso: kind == .quiz)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
-            if showsChevron {
+            if showsMoreButton {
                 moreButton
-                    .frame(maxWidth: .infinity)
                     .padding(.top, 2)
             }
         }
         .padding(.top, padTop)
         .padding(.horizontal, padX)
-        .padding(.bottom, showsChevron ? 14 : 16)
+        .padding(.bottom, showsMoreButton ? 14 : 16)
         .frame(width: bubbleOuterWidth, alignment: .leading)
         .background(Theme.bubble, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
         .hitRegion("bubble-\(card.id)", .solid)
@@ -215,7 +217,7 @@ private struct SpeechBubble: View {
     }
 
     private var showsExplanation: Bool {
-        if kind == .quiz { return quizPick != nil }
+        if kind == .quiz { return quizPick != nil && deep }
         return deep && card.hasExtra
     }
 
@@ -223,21 +225,28 @@ private struct SpeechBubble: View {
         kind == .quiz ? Session.shared.t("widget.quiz") : Session.shared.t("widget.info")
     }
 
+    private var moreLabel: String {
+        if kind == .quiz {
+            return Session.shared.t(deep ? "widget.hide_explain" : "widget.show_explain")
+        }
+        return Session.shared.t(deep ? "widget.collapse" : "widget.more")
+    }
+
     private var moreButton: some View {
         Button(action: toggle) {
-            Image(systemName: "chevron.down")
-                .font(.system(size: 12, weight: .bold))
+            Text(moreLabel)
+                .font(.system(size: 12, weight: .semibold))
                 .foregroundStyle(Color(red: 17 / 255, green: 17 / 255, blue: 19 / 255))
-                .rotationEffect(.degrees(deep ? 180 : 0))
-                .animation(.timingCurve(0.23, 1, 0.32, 1, duration: 0.2), value: deep)
-                .frame(width: Theme.chevron, height: Theme.chevron)
-                .background(Circle().fill(.white))
-                .contentShape(Circle())
+                .padding(.horizontal, 12)
+                .frame(minHeight: Theme.chevron)
+                .fixedSize()
+                .background(Capsule().fill(.white))
+                .contentShape(Capsule())
         }
         .buttonStyle(PressableStyle())
         .pointerHand()
-        .hitRegion("chevron-\(card.id)", [.click, .solid])
-        .accessibilityLabel(deep ? Session.shared.t("widget.collapse") : Session.shared.t("widget.more"))
+        .hitRegion("more-\(card.id)", [.click, .solid])
+        .accessibilityLabel(moreLabel)
     }
 
     @ViewBuilder

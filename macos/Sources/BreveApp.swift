@@ -1,5 +1,4 @@
 import AppKit
-import Sparkle
 import SwiftUI
 
 @main
@@ -18,28 +17,14 @@ struct BreveApp: App {
 }
 
 final class AppDelegate: NSObject, NSApplicationDelegate {
-    private var updaterController: SPUStandardUpdaterController?
-
-    func applicationWillFinishLaunching(_ notification: Notification) {
-        let controller = SPUStandardUpdaterController(
-            startingUpdater: false,
-            updaterDelegate: AppUpdater.shared,
-            userDriverDelegate: nil
-        )
-        updaterController = controller
-    }
-
     func applicationDidFinishLaunching(_ notification: Notification) {
         NSApp.setActivationPolicy(.accessory)
         WidgetPanelController.shared.start()
         Session.shared.start()
         WidgetPanelController.shared.refresh()
-        updaterController?.startUpdater()
-        if let updater = updaterController?.updater {
-            AppUpdater.shared.attach(updater)
-        }
+        AppUpdater.shared.start()
         #if DEBUG
-        if DebugEnv.value("SPARKLE_CHECK") == "1" {
+        if ProcessInfo.processInfo.environment["BREVE_UPDATE_CHECK"] == "1" {
             Task { @MainActor in
                 try? await Task.sleep(for: .seconds(1.5))
                 AppUpdater.shared.present()

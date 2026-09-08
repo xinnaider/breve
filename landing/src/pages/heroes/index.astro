@@ -1,0 +1,17 @@
+---
+import ConceitoBase from '../../layouts/ConceitoBase.astro';
+const options=[{id:1,name:'Editorial',description:'Tipografia com personalidade, espaço para respirar e uma chamada direta.'},{id:2,name:'Boas-vindas',description:'Uma janela nativa de apresentação. Mascote em destaque e instalação como ação principal.'},{id:3,name:'Barra lateral',description:'Uma pequena aplicação dentro da mesa. Navegação na lateral e conteúdo à direita.'},{id:4,name:'Depois do expediente',description:'Janela escura, texto enxuto e contraste com o wallpaper e o widget.'},{id:5,name:'Uma nota para você',description:'Uma mensagem pessoal em papel claro. Mais próxima, tranquila e editorial.'}];
+---
+<ConceitoBase title="Cinco janelas para o Breve" surface="#eeede9" ink="#252524">
+<main id="conteudo">
+<header><a href="/">← Voltar à mesa</a><span>BREVE / ESTUDOS DO HERO</span><h1>A mesma mesa.<br/>Cinco formas de chegar.</h1><p>Escolha uma janela para explorar. Instalação, mascote e conteúdo continuam interativos em todas elas.</p></header>
+<div class="gallery">{options.map(o=>(<a class="proposal" href={`/heroes/${o.id}`}><div class="preview"><iframe src={`/heroes/${o.id}`} title={`Prévia: ${o.name}`} tabindex="-1" loading="lazy"></iframe></div><div class="caption"><span class="number">0{o.id}</span><div><h2>{o.name}</h2><p>{o.description}</p></div><span class="arrow">↗</span></div></a>))}</div>
+</main>
+<style>
+main{max-width:1320px;margin:auto;padding:40px 32px 70px;font-family:Geist,sans-serif}header>a{display:block;margin-bottom:45px;font-size:13px;text-decoration:none}header>span{font-size:10px;letter-spacing:2px;color:#73716c}h1{font-family:Besley,Georgia,serif;font-size:48px;line-height:1.13;letter-spacing:-2px;margin:14px 0 18px}header>p{font-size:15px;line-height:1.7;color:#77736d;max-width:530px;margin-bottom:36px}.gallery{display:grid;grid-template-columns:1fr 1fr;gap:32px 24px}.proposal{color:inherit;text-decoration:none;border:1px solid #dcdad4;border-radius:12px;overflow:hidden;background:#f9f8f4;transition:box-shadow .2s}.proposal:hover{box-shadow:0 12px 30px #0001}.preview{height:290px;overflow:hidden;background:#d9d4c9;position:relative}.preview iframe{position:absolute;border:0;width:1440px;height:901px;transform:scale(.435);transform-origin:0 0;pointer-events:none;left:0;top:0}.caption{display:flex;gap:16px;padding:24px}.number{font-size:12px;color:#999}.caption h2{font-size:19px;font-weight:500;margin:0 0 8px}.caption p{font-size:13px;color:#777;line-height:1.6;margin:0;max-width:370px}.arrow{margin-left:auto;font-size:22px}@media(max-width:800px){main{padding:24px 16px}.gallery{grid-template-columns:1fr}h1{font-size:36px}.preview{height:240px}.preview iframe{transform:scale(.35)}.caption{padding:20px}}@media(prefers-reduced-motion:reduce){.proposal{transition:none}}
+</style>
+<script>
+const fit=()=>document.querySelectorAll('.preview').forEach(el=>{const frame=el.querySelector('iframe');const scale=el.clientWidth/1440;frame.style.transform=`scale(${scale})`;el.style.height=`${901*scale}px`});new ResizeObserver(fit).observe(document.querySelector('.gallery'));fit();
+</script>
+
+</ConceitoBase>

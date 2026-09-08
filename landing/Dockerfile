@@ -3,6 +3,7 @@ WORKDIR /src
 COPY landing/package.json landing/package-lock.json /src/landing/
 RUN cd /src/landing && npm ci
 COPY assets /src/assets
+COPY content/development.pt.yaml content/development.en.yaml /src/content/
 COPY landing /src/landing
 RUN cd /src/landing && npm run build
 

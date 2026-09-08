@@ -1,0 +1,26 @@
+---
+import { Image } from "astro:assets";
+import mascot from "../../../../assets/bonequinho.png";
+import wallpaper from "../../assets/desktop-wallpaper.png";
+const { edge = "right", compact = false } = Astro.props;
+---
+
+<div class:list={["desk", compact && "desk-compact"]} data-desk data-edge={edge}>
+  <div class="desk-chrome" aria-hidden="true">
+    <Image class="desk-wall" src={wallpaper} alt="" widths={[720, 1200, 1800]} sizes="(max-width: 700px) 100vw, 900px" loading="eager" quality={80} />
+    <div class="desk-bar">
+      <span>Finder</span>
+      <span>09:41</span>
+    </div>
+    <div class="desk-folder">
+      <span class="desk-folder-icon"></span>
+      <span>Estudos</span>
+    </div>
+  </div>
+  <div class="desk-widget">
+    <slot />
+    <button class="desk-mascot" type="button" data-toggle-note aria-expanded="true" aria-label="Abrir ou fechar a nota">
+      <Image src={mascot} alt="" width={44} height={45} loading="eager" draggable="false" />
+    </button>
+  </div>
+</div>

@@ -1,0 +1,11 @@
+---
+const { n } = Astro.props;
+---
+
+<nav class="review-bar" aria-label="Exploração local">
+  <p class="review-bar-k">Exploração local · não é a landing publicada</p>
+  <p class="review-bar-links">
+    <a href="/conceitos">Todas as propostas</a>
+    <a href={`/conceitos/${n}-componentes`}>Componentes e estados</a>
+  </p>
+</nav>

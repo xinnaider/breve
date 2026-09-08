@@ -1,0 +1,71 @@
+---
+import ConceitoBase from "../../layouts/ConceitoBase.astro";
+---
+
+<ConceitoBase title="Conceitos de landing · Breve" theme="#F7F4EE">
+  <style is:global>
+    body { margin: 0; background: #f4efe6; color: #222420; font-family: Geist, sans-serif; font-size: 16px; line-height: 1.5; }
+    .g { width: min(1120px, calc(100% - 40px)); margin: 0 auto; padding: 40px 0 80px; }
+    h1 { font-family: Besley, Georgia, serif; font-size: clamp(32px, 5vw, 48px); line-height: 1.15; }
+    .lead { max-width: 62ch; color: #4a4d48; }
+    .grid { display: grid; gap: 18px; margin-top: 32px; }
+    @media (min-width: 800px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1100px) {
+      .grid { grid-template-columns: repeat(3, 1fr); }
+      .rec { grid-column: 1; }
+    }
+    .skip { position:absolute; left:12px; top:-80px; padding:10px 16px; background:#111; color:#fff; }
+    .skip:focus { top:10px; }
+    a.card {
+      display: flex; flex-direction: column; gap: 8px; min-height: 220px;
+      padding: 22px; border-radius: 16px; text-decoration: none; color: inherit;
+      border: 1px solid #0002;
+    }
+    a.card:focus-visible { outline: 3px solid #E87942; outline-offset: 3px; }
+    .k { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: #6b6e68; }
+    .rec { box-shadow: 0 0 0 2px #E87942; }
+    .nav { display: flex; gap: 16px; flex-wrap: wrap; margin: 12px 0 28px; }
+    .nav a { color: #3d3f3b; }
+    .nav .github { color: #3d3f3b; opacity: 1; }
+    .note { margin-top: 40px; padding: 16px 18px; background: #fff8; border-radius: 12px; font-size: 15px; }
+  </style>
+  <main class="g" id="conteudo">
+    <p class="k">Exploração local · sem índice público</p>
+    <h1>Cinco direções para a landing do Breve</h1>
+    <p class="lead">Mockups navegáveis para comparar. A landing publicada não muda até uma escolha. Instalação: compilação local com Xcode e XcodeGen. Recomendação: conceito 1.</p>
+    <nav class="nav" aria-label="Produção">
+      <a href="/">Landing atual (produção, inalterada)</a>
+      <a class="github" href="https://github.com/xinnaider/breve">GitHub</a>
+    </nav>
+    <div class="grid">
+      <a class="card rec" href="/conceitos/1/" style="background:#F7F4EE">
+        <span class="k">1 · recomendada</span>
+        <strong>Uma pausa breve</strong>
+        <span>Editorial em papel. Nota grande, dialog compacto de instalação.</span>
+      </a>
+      <a class="card" href="/conceitos/2/" style="background:#DDE7EA">
+        <span class="k">2</span>
+        <strong>No canto do seu dia</strong>
+        <span>A página é a área de trabalho. Painel lateral, sem modal no demo.</span>
+      </a>
+      <a class="card" href="/conceitos/3/" style="background:#FCFBF7">
+        <span class="k">3</span>
+        <strong>Cartas para aprender</strong>
+        <span>Duas fichas, gabarito e instalação inline no rodapé.</span>
+      </a>
+      <a class="card" href="/conceitos/4/" style="background:#181B1B;color:#F4F3ED">
+        <span class="k">4</span>
+        <strong>Breve, em foco</strong>
+        <span>Página escura, dialog em duas colunas, campo de comando estável.</span>
+      </a>
+      <a class="card" href="/conceitos/5/" style="background:#FFF8EB">
+        <span class="k">5</span>
+        <strong>Menos rolagem, mais uma ideia</strong>
+        <span>Tipografia grande, três colunas, dialog com ícone de Mac.</span>
+      </a>
+    </div>
+    <p class="note"><strong>Achado para o instalador (fora desta tarefa):</strong> o <code>install.sh</code> também deixa <code>app/Breve.app</code> no clone, o que pode duplicar o app na busca do Mac.</p>
+    <p class="note">Pergunta pendente: “input com link” por enquanto é o campo do comando de instalação, não um importador de URLs.</p>
+    <p class="note">Área de estados: <a href="/conceitos/1-componentes">1</a> · <a href="/conceitos/2-componentes">2</a> · <a href="/conceitos/3-componentes">3</a> · <a href="/conceitos/4-componentes">4</a> · <a href="/conceitos/5-componentes">5</a></p>
+  </main>
+</ConceitoBase>

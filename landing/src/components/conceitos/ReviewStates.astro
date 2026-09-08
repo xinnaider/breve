@@ -1,0 +1,108 @@
+---
+import ConceitoBase from "../../layouts/ConceitoBase.astro";
+import InstallFields from "./InstallFields.astro";
+
+const {
+  n,
+  name,
+  theme,
+  ink,
+  accent,
+  paper,
+  href,
+} = Astro.props;
+const onAccent = n === 4 ? "#181B1B" : "#fff";
+---
+
+<ConceitoBase title={`Componentes · ${name} · Breve`} theme={theme} surface={paper} ink={ink}>
+  <style is:global define:vars={{ paper, ink, accent, theme, onAccent }}>
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: Geist, sans-serif;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+    .rev { width: min(920px, calc(100% - 32px)); margin: 0 auto; padding: 28px 0 72px; }
+    .rev h1 { font-family: Besley, Georgia, serif; font-size: clamp(28px, 4vw, 40px); }
+    .banner {
+      background: #fff3cd; color: #3b2f00; border: 1px solid #e6d28a;
+      padding: 12px 14px; border-radius: 10px; margin: 16px 0 28px;
+    }
+    .state { margin: 0 0 36px; padding: 20px; border: 1px solid color-mix(in srgb, var(--ink) 16%, transparent); border-radius: 14px; background: color-mix(in srgb, var(--paper) 88%, #fff); }
+    .state h2 { margin: 0 0 6px; font-size: 18px; }
+    .k { font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: color-mix(in srgb, var(--ink) 55%, #888); }
+    .install-label { display: block; font-weight: 600; margin: 12px 0 6px; }
+    .install-cmd, .install-script-url {
+      width: 100%; font: 14px ui-monospace, monospace; padding: 12px;
+      border-radius: 8px; border: 1px solid #0002;
+      background: #fff; color: #222;
+    }
+    .install-copy-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin: 10px 0; }
+    .install-copy { min-height: 44px; min-width: 11.5rem; background: var(--accent); color: var(--onAccent); border: 0; border-radius: 8px; padding: 0 16px; }
+    .install-copy.is-review-focus { outline: 3px solid var(--accent); outline-offset: 3px; }
+    .install-links { display: flex; gap: 16px; flex-wrap: wrap; }
+    .install-links a { color: var(--accent); min-height: 44px; display: inline-flex; align-items: center; }
+    .phone {
+      width: 390px; max-width: 100%; height: 640px; border: 1px solid color-mix(in srgb, var(--ink) 20%, transparent);
+      border-radius: 12px; background: #fff;
+    }
+    a { color: inherit; }
+    a:focus-visible, button:focus-visible, textarea:focus-visible, input:focus-visible {
+      outline: 3px solid var(--accent); outline-offset: 3px;
+    }
+    .nav { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 12px; }
+  </style>
+  <main class="rev" id="conteudo">
+    <nav class="nav">
+      <a href={href}>Voltar ao conceito {n}</a>
+      <a href="/conceitos">Galeria</a>
+    </nav>
+    <p class="k">Revisão de componentes · conceito {n}</p>
+    <h1>{name}</h1>
+    <p class="banner">
+      Esta página é só para revisar estados. Nenhum destes exemplos significa que a instalação rodou, detectou Xcode ou concluiu com sucesso.
+    </p>
+
+    <section class="state" aria-labelledby={`s-normal-${n}`}>
+      <p class="k">Normal</p>
+      <h2 id={`s-normal-${n}`}>Campo e cópia, estado inicial</h2>
+      <InstallFields fieldId={`rev-${n}-ok`} />
+    </section>
+
+    <section class="state" aria-labelledby={`s-focus-${n}`}>
+      <p class="k">Foco</p>
+      <h2 id={`s-focus-${n}`}>Aparência de foco de teclado</h2>
+      <p>O anel abaixo é estático, para conferir o contraste. Use Tab na seção Normal para o foco real.</p>
+      <button class="install-copy is-review-focus" type="button" tabindex="-1" aria-hidden="true">Copiar comando</button>
+    </section>
+
+    <section class="state" aria-labelledby={`s-copied-${n}`}>
+      <p class="k">Copiado</p>
+      <h2 id={`s-copied-${n}`}>Depois de uma cópia bem-sucedida</h2>
+      <p>Simulação visual. O botão real na seção Normal muda para “Copiado” e anuncia no aria-live.</p>
+      <div class="install-copy-row">
+        <button class="install-copy" type="button" tabindex="-1" aria-hidden="true">Copiado</button>
+        <p role="status">Copiado</p>
+      </div>
+    </section>
+
+    <section class="state" aria-labelledby={`s-fail-${n}`}>
+      <p class="k">Falha de cópia</p>
+      <h2 id={`s-fail-${n}`}>Clipboard indisponível</h2>
+      <p>Este botão força a mensagem de falha. O campo continua selecionável para cópia manual.</p>
+      <InstallFields fieldId={`rev-${n}-fail`} forceFail />
+    </section>
+
+    <section class="state" aria-labelledby={`s-mobile-${n}`}>
+      <p class="k">Mobile · 390px</p>
+      <h2 id={`s-mobile-${n}`}>Página do conceito em viewport estreita</h2>
+      <iframe class="phone" src={href} title={`${name} em 390 pixels`} loading="lazy"></iframe>
+    </section>
+  </main>
+  <script>
+    import { setupInstall } from "../../scripts/conceitos/install.js";
+    document.querySelectorAll("[data-install-root]").forEach((el) => setupInstall(el));
+  </script>
+</ConceitoBase>

@@ -1,0 +1,107 @@
+---
+import ConceitoBase from "../../layouts/ConceitoBase.astro";
+import ReviewBar from "../../components/conceitos/ReviewBar.astro";
+import { Image } from "astro:assets";
+import mascot from "../../../../assets/bonequinho.png";
+import MacDesk from "../../components/conceitos/MacDesk.astro";
+import InstallFields from "../../components/conceitos/InstallFields.astro";
+import QuizChoices from "../../components/conceitos/QuizChoices.astro";
+import { NOTE, QUIZ, QUIZ_NEXT } from "../../data/conceitos.js";
+---
+
+<ConceitoBase title="Poucas linhas. Uma ideia que fica. · Breve" theme="#FCFBF7">
+  <style is:global>
+    @import "../../styles/conceitos/desk.css";
+    body { margin:0; background:#FCFBF7; color:#26352D; font-family:Besley,Georgia,serif; font-size:16px; line-height:1.55; }
+    .p3 { width:min(1040px, calc(100% - 40px)); margin:0 auto; }
+    header .github { color:#2f4a3c; text-decoration-thickness:1.5px; }
+    .p3-hero { text-align:center; padding: 28px 0 36px; }
+    .p3-hero h1 { font-size:clamp(36px,5vw,56px); margin:0 0 12px; }
+    .p3-pair { display:grid; gap:20px; align-items:start; }
+    @media (min-width: 800px) { .p3-pair { grid-template-columns: 1.1fr 0.9fr; } }
+    .ficha { border:1px solid #26352D22; padding:22px 22px 18px; background:#fff; }
+    .ficha-shift { margin-top: 28px; }
+    .tag { font-family:Geist,sans-serif; font-size:12px; letter-spacing:.06em; text-transform:uppercase; }
+    .quiz-opt { display:block; width:100%; text-align:left; margin:8px 0; padding:12px; min-height:44px; border:1px solid #26352D33; background:#FCFBF7; font:inherit; }
+    .quiz-opt[aria-pressed="true"] { border-color:#4C7158; }
+    .p3-cta { min-height:44px; background:#4C7158; color:#fff; border:0; padding:0 18px; font-family:Geist,sans-serif; }
+    .p3-desk { margin: 48px 0; }
+    .p3-start { border:1px solid #26352D22; padding:28px; margin: 48px 0 80px; background:#f6f4ee; }
+    .install-label { display:block; font-family:Geist,sans-serif; font-weight:600; margin:10px 0 6px; }
+    .install-cmd { width:100%; font:14px ui-monospace,monospace; padding:12px; }
+    .install-copy { min-height:44px; min-width:11.5rem; background:#4C7158; color:#fff; border:0; }
+    .install-copy-row { display:flex; gap:12px; align-items:center; flex-wrap:wrap; margin:10px 0; }
+    .install-links { display:flex; gap:16px; flex-wrap:wrap; font-family:Geist,sans-serif; }
+    .install-links a { color:#4C7158; min-height:44px; display:inline-flex; align-items:center; }
+    details summary { min-height:44px; display:flex; align-items:center; font-family:Geist,sans-serif; cursor:pointer; }
+    a:focus-visible, button:focus-visible, textarea:focus-visible { outline:3px solid #4C7158; outline-offset:3px; }
+  </style>
+
+  <ReviewBar n={3} />
+  <div class="p3">
+    <header>
+      <a href="#conteudo" style="display:flex;gap:8px;align-items:center;text-decoration:none;color:inherit">
+        <Image src={mascot} alt="" width={26} height={27} /> Breve
+      </a>
+      <nav style="display:flex;gap:16px;align-items:center;font-family:Geist,sans-serif">
+        <a class="github" href="https://github.com/xinnaider/breve">GitHub</a>
+        <a class="p3-cta" href="#comecar" style="display:inline-flex;align-items:center;text-decoration:none">Instalar no Mac</a>
+      </nav>
+    </header>
+    <main id="conteudo" data-study>
+      <section class="p3-hero">
+        <h1>Poucas linhas. Uma ideia que fica.</h1>
+        <p>Leia uma nota ou teste o que sabe. O Breve traz os temas que você escolheu para o canto do Mac.</p>
+        <p><button class="p3-cta" type="button" data-try>Experimentar uma nota</button></p>
+        <p style="font-family:Geist,sans-serif;font-size:14px;color:#5a6a62">Feito para o Mac. Open source.</p>
+      </section>
+      <section class="p3-pair">
+        <article class="ficha" data-note>
+          <p class="tag">{NOTE.topic} · {NOTE.kind}</p>
+          <h2 style="font-size:26px">{NOTE.title}</h2>
+          <p>{NOTE.body}</p>
+          {NOTE.explanation.map((p) => <p>{p}</p>)}
+        </article>
+        <div>
+          <article class="ficha ficha-shift" data-quiz-pack>
+            <p class="tag">{QUIZ.topic} · {QUIZ.kind}</p>
+            <h2 style="font-size:22px">{QUIZ.title}</h2>
+            <QuizChoices quiz={QUIZ} />
+          </article>
+          <article class="ficha ficha-shift" data-quiz-pack hidden>
+            <p class="tag">{QUIZ_NEXT.topic} · {QUIZ_NEXT.kind}</p>
+            <h2 style="font-size:22px">{QUIZ_NEXT.title}</h2>
+            <QuizChoices quiz={QUIZ_NEXT} />
+          </article>
+          <p><button type="button" data-next class="quiz-opt">Próximo conteúdo</button></p>
+        </div>
+      </section>
+      <section class="p3-desk">
+        <MacDesk compact>
+          <article class="study-card" style="background:#fff;border:1px solid #26352D22;padding:12px">
+            <p class="tag">{NOTE.kind}</p>
+            <h2 style="font-size:16px;margin:0">{NOTE.title}</h2>
+          </article>
+        </MacDesk>
+        <p style="font-family:Geist,sans-serif;font-size:15px;color:#5a6a62">Você marca os temas e se quer notas, questões ou os dois. O mascote traz só o que você escolheu.</p>
+      </section>
+      <section class="p3-start" id="comecar">
+        <h2>Começar no Mac</h2>
+        <details open>
+          <summary>Requisitos</summary>
+          <p>Para Mac com Apple Silicon e macOS 14 ou mais recente. Requer Xcode e XcodeGen.</p>
+          <p>O instalador compila o Breve no seu Mac e coloca o app em Aplicativos.</p>
+        </details>
+        <InstallFields fieldId="p3-cmd" hideReq hideBlurb />
+      </section>
+    </main>
+  </div>
+  <script>
+    import { setupInstall } from "../../scripts/conceitos/install.js";
+    import { setupStudy } from "../../scripts/conceitos/study.js";
+    import { wireTryButtons } from "../../scripts/conceitos/ui.js";
+    document.querySelectorAll("[data-install-root]").forEach((el) => setupInstall(el));
+    setupStudy(document.getElementById("conteudo"));
+    wireTryButtons("[data-note]");
+  </script>
+</ConceitoBase>

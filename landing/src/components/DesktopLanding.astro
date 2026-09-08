@@ -1,0 +1,163 @@
+---
+import { Image, getImage } from "astro:assets";
+import mascot from "../../../assets/bonequinho.png";
+import wallpaper from "../assets/desktop-wallpaper.png";
+import { CATALOG, UI } from "../data/catalog.js";
+import { INSTALL_CMD, SCRIPT_URL, HELP_URL, REPO } from "../data/conceitos.js";
+import "@fontsource/besley/latin-400.css";
+import "@fontsource/besley/latin-600.css";
+import "@fontsource/geist/latin-400.css";
+import "@fontsource/geist/latin-500.css";
+import "@fontsource/geist/latin-600.css";
+import "../styles/desktop.css";
+
+import HeroOptions from "./HeroOptions.astro";
+const { variant = 0, darkEditorial = false, exploration = variant > 0 } = Astro.props;
+const favicon = await getImage({ src: mascot, width: 48, format: "png" });
+const payload = {
+  catalog: CATALOG,
+  ui: UI,
+  install: { cmd: INSTALL_CMD, script: SCRIPT_URL, help: HELP_URL, repo: REPO },
+};
+---
+
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#F7F4EE" />
+    <meta
+      name="description"
+      content="Notas curtas e perguntas no canto do Mac. Escolha seus temas e aprenda um pouco por vez."
+    />
+    <meta property="og:title" content="Uma pausa. Uma ideia nova. · Breve" />
+    <meta
+      property="og:description"
+      content="Notas curtas e perguntas no canto do Mac. Escolha seus temas e aprenda um pouco por vez."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="pt_BR" />
+    <title>{exploration ? `Hero ${variant} · Breve` : "Uma pausa. Uma ideia nova. · Breve"}</title>
+    {exploration && <meta name="robots" content="noindex, nofollow"/>}
+    <link rel="icon" href={favicon.src} type="image/png" />
+  </head>
+  <body>
+    <a class="skip" href="#hero">Pular para o conteúdo</a>
+    <div class="desk" data-desk>
+      <Image
+        class="desk-wall"
+        src={wallpaper}
+        alt=""
+        widths={[720, 1200, 1800, 2400]}
+        sizes="100vw"
+        loading="eager"
+        quality={82}
+      />
+
+      <header class="menubar" aria-label="Barra de menus do macOS">
+        <div class="menubar-left">
+          <button class="system-apple" data-focus-hero aria-label="Sobre o Breve"></button>
+          <button class="menu-item active-app" data-focus-hero>Breve</button>
+          <button class="menu-item" data-try>Conteúdo</button>
+          <button class="menu-item" data-next>Próximo</button>
+          <a class="menu-item" href={HELP_URL} target="_blank" rel="noreferrer">Ajuda</a>
+          <button class="menubar-show" data-hero-show hidden>Mostrar janela</button>
+        </div>
+        <div class="menubar-right">
+          <button class="menu-item menu-pet" data-try aria-label="Abrir Breve"><Image src={mascot} alt="" width={18} height={18}/></button>
+          <svg class="system-status" aria-hidden="true" width="54" height="16" viewBox="0 0 54 16" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M1 5q8-7 16 0M4 8q5-5 10 0M7 11q2-2 4 0"/><circle cx="9" cy="13" r=".6" fill="currentColor"/><rect x="28" y="4" width="21" height="10" rx="2"/><path d="M51 7v4"/><rect x="30" y="6" width="16" height="6" rx="1" fill="currentColor" stroke="none"/></svg>
+          <time data-clock></time>
+        </div>
+      </header>
+
+      <section class:list={["hero-window", `hero-option-${variant}`, darkEditorial && "hero-editorial-dark"]} id="hero" data-hero aria-labelledby="hero-title">
+        <div class="hero-chrome">
+          <div class="traffic" role="toolbar" aria-label="Janela de apresentação">
+            <button class="tl tl-close" type="button" data-hero-close aria-label="Fechar apresentação"><i></i></button>
+            <button class="tl tl-min" type="button" data-hero-min aria-label="Minimizar apresentação"><i></i></button>
+            <button class="tl tl-max" type="button" data-hero-max aria-label="Expandir apresentação" aria-pressed="false"><i></i></button>
+          </div>
+          <span class="hero-titlebar">Breve</span>
+        </div>
+        {variant ? <HeroOptions variant={variant} darkEditorial={darkEditorial} /> : (
+        <div class="hero-body">
+          <p class="hero-brand">
+            <Image src={mascot} alt="" width={26} height={27} loading="eager" />
+            Breve
+          </p>
+          <h1 id="hero-title" tabindex="-1">Uma pausa. Uma ideia nova.</h1>
+          <p class="hero-lead">Notas curtas e perguntas no canto do Mac. Escolha seus temas e aprenda um pouco por vez.</p>
+          <div class="hero-actions">
+            <button class="btn btn-cta" type="button" data-open-install>Instalar no Mac</button>
+            <button class="btn btn-ghost" type="button" data-try>Experimentar o Breve</button>
+          </div>
+          <p class="hero-sign">Feito para o Mac. <a href={REPO} target="_blank" rel="noreferrer">Open source ↗</a></p>
+        </div>
+        )}
+      </section>
+
+      <div class="breve" data-breve>
+        <article class="study-card" id="breve-card" data-card aria-label="Cartão do Breve">
+          <p class="meta"><span class="type-badge">Desenvolvimento</span><span data-topic-label></span><span data-kind></span></p>
+          <div data-note-view>
+            <h2 data-note-title></h2>
+            <p data-note-body></p>
+            <div data-note-expl hidden></div>
+            <button class="chip" type="button" data-note-more>Ver mais</button>
+          </div>
+          <div data-quiz-view hidden>
+            <h2 data-quiz-title></h2>
+            <div data-options></div>
+            <p class="explain" data-explain hidden></p><button class="chip" data-quiz-more hidden>Ocultar explicação</button>
+          </div>
+
+        </article>
+        <span class="bubble-tail" aria-hidden="true"></span>
+        <button class="mascot" type="button" data-toggle-note aria-expanded="true" aria-controls="breve-card" aria-label="Fechar o cartão">
+          <Image src={mascot} alt="" width={44} height={45} loading="eager" draggable="false" />
+        </button>
+      </div>
+
+      <nav class="mac-dock" aria-label="Dock">
+        <button class="dock-item dock-home" data-focus-hero aria-label="Apresentação do Breve"><span class="dock-icon finder-icon" aria-hidden="true"><svg viewBox="0 0 52 52" width="52" height="52" fill="none" stroke="#17394e" stroke-width="1.6"><path d="M28 3l-4 26h8l-2 21M12 33q13 10 28-1"/><path d="M16 16v6m21-6v6" stroke-width="2.2" stroke-linecap="round"/></svg></span><span class="dock-label">Apresentação</span><i></i></button>
+        <a class="dock-item" href={REPO} target="_blank" rel="noreferrer" aria-label="Código no GitHub"><span class="dock-icon terminal-icon" aria-hidden="true">&gt;_</span><span class="dock-label">GitHub</span></a>
+        <span class="dock-divider"></span>
+        <button class="dock-item" data-open-install aria-label="Instalar no Mac"><span class="dock-icon download-icon" aria-hidden="true">↓</span><span class="dock-label">Instalar Breve</span></button>
+      </nav>
+    </div>
+
+    <dialog class="install-dlg" data-install-dialog aria-labelledby="install-title">
+      <div class="hero-chrome">
+        <div class="traffic" role="toolbar" aria-label="Janela de instalação">
+          <button class="tl tl-close" type="button" data-close-install aria-label="Fechar instalação"><i></i></button>
+        </div>
+        <span class="hero-titlebar">Instalar no Mac</span>
+      </div>
+      <div class="install-body" data-install-root>
+        <h2 id="install-title">Leve o Breve para o seu Mac</h2>
+        <p class="install-req">Para Mac com Apple Silicon e macOS 14 ou mais recente. Requer Xcode e XcodeGen.</p>
+        <p class="install-blurb">O instalador compila o Breve no seu Mac e coloca o app em Aplicativos.</p>
+        <p class="install-nonmac" hidden data-nonmac>A instalação é feita no Mac.</p>
+        <label class="install-label" for="install-cmd">Comando de instalação</label>
+        <textarea id="install-cmd" class="install-cmd" data-install-cmd data-dialog-focus readonly rows="2" spellcheck="false">{INSTALL_CMD}</textarea>
+        <div class="install-copy-row">
+          <button type="button" class="install-copy" data-copy aria-label="Copiar comando">Copiar comando</button>
+          <p role="status" aria-live="polite" data-copy-status></p>
+        </div>
+        <p class="install-steps">Copie o comando, cole no Terminal e, depois de instalar, pesquise Breve no Mac.</p>
+        <p class="install-links">
+          <a href={SCRIPT_URL} target="_blank" rel="noreferrer">Ver o script</a>
+          <a href={HELP_URL} target="_blank" rel="noreferrer">Ajuda para instalar</a>
+        </p>
+      </div>
+    </dialog>
+
+    <script id="breve-data" type="application/json" set:html={JSON.stringify(payload)}></script>
+    <script>
+      import { boot } from "../scripts/desktop/landing.js";
+      const data = JSON.parse(document.getElementById("breve-data").textContent);
+      boot(data);
+    </script>
+  </body>
+</html>

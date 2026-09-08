@@ -1,6 +1,6 @@
 # Landing do Breve
 
-Site estático em Astro, independente do app macOS. Reutiliza o mascote em `../assets/bonequinho.png`.
+Site estático em Astro. A página simula uma mesa macOS, com janela de apresentação, mascote interativo e modal de instalação.
 
 ```bash
 cd landing
@@ -8,16 +8,13 @@ npm ci
 npm run dev
 ```
 
-Produção: `npm run build`. Saída em `landing/dist/`. Revisão local: `npm run preview`.
+`npm run build` gera `dist/`; `npm run preview` abre a versão compilada.
 
 - Página: `src/pages/index.astro`
-- Demonstração: `src/components/Demo.astro` e `src/scripts/demo.js`
-- Visual: `src/styles/global.css`
+- Mesa e interações: `src/components/DesktopLanding.astro`, `src/scripts/desktop/landing.js`
+- Hero: `src/components/HeroOptions.astro`
+- Instalação: `src/components/InstallContent.astro`, `src/scripts/install.js`, `src/data/install.js`
+- Visual: `src/styles/desktop.css` e `src/styles/hero-options.css`
+- Conteúdo: `src/data/catalog.js`, a partir dos YAML em `content/`
 
-Fundo creme, títulos em Besley (servida localmente) e acentos laranja. O mockup de macOS é HTML e CSS; clicar no mascote abre e fecha o informativo, também acessível por teclado. A animação respeita a preferência de movimento reduzido.
-
-O papel de parede está em `src/assets/desktop-wallpaper.png`. O Astro entrega versões WebP responsivas.
-
-O repositório público é `https://github.com/xinnaider/breve`. O modal de instalação aponta para o `install.sh` (clone + build local).
-
-Para servir a imagem Docker na sua máquina, veja `compose.example.yaml` na raiz do repositório.
+O Dockerfile na pasta `landing/` usa a raiz do repositório como contexto. Explorações e relatórios locais ficam em `reports/`, fora do Git e das rotas do site.

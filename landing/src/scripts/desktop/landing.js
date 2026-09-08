@@ -1,4 +1,4 @@
-import { setupInstall, setupDialog } from "../conceitos/install.js";
+import { setupInstall, setupDialog } from "../install.js";
 
 function escapeHtml(text) {
   return String(text).replace(/[&<>"]/g, (char) => ({

@@ -1,4 +1,4 @@
-import { INSTALL_CMD } from "../../data/conceitos.js";
+import { INSTALL_CMD } from "../data/install.js";
 
 function isMacOS() {
   const ua = navigator.userAgent || "";
@@ -67,51 +67,4 @@ export function setupDialog(dialog) {
     btn.addEventListener("click", () => dialog.close());
   });
   dialog.addEventListener("close", () => last?.focus());
-}
-
-export function setupPanel(panel) {
-  if (!panel) return;
-  panel.removeAttribute("aria-modal");
-  panel.setAttribute("role", "region");
-
-  const toggles = [...document.querySelectorAll("[data-open-install]")];
-  toggles.forEach((btn) => {
-    if (panel.id) btn.setAttribute("aria-controls", panel.id);
-    btn.setAttribute("aria-expanded", "false");
-  });
-
-  const setExpanded = (open) => {
-    toggles.forEach((btn) => btn.setAttribute("aria-expanded", String(open)));
-  };
-
-  const open = (btn) => {
-    panel.hidden = false;
-    panel._last = btn;
-    setExpanded(true);
-    (panel.querySelector("[data-dialog-focus]") || panel.querySelector("button, textarea, a"))?.focus();
-  };
-
-  const close = () => {
-    if (panel.hidden) return;
-    panel.hidden = true;
-    setExpanded(false);
-    panel._last?.focus();
-  };
-
-  toggles.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      if (!panel.hidden && panel._last === btn) close();
-      else open(btn);
-    });
-  });
-  panel.querySelectorAll("[data-close-install]").forEach((btn) => {
-    btn.addEventListener("click", close);
-  });
-  document.addEventListener("keydown", (event) => {
-    if (panel.hidden) return;
-    if (event.key === "Escape") {
-      event.preventDefault();
-      close();
-    }
-  });
 }

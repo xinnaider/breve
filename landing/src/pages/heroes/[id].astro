@@ -1,6 +1,0 @@
----
-import DesktopLanding from "../../components/DesktopLanding.astro";
-export function getStaticPaths(){ return [1,2,3,4,5].map(id=>({params:{id:String(id)},props:{variant:id}})); }
-const {variant}=Astro.props;
----
-<DesktopLanding variant={variant}/>

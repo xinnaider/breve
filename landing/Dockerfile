@@ -6,7 +6,6 @@ COPY assets /src/assets
 COPY content/development.pt.yaml content/development.en.yaml /src/content/
 COPY macos/Assets.xcassets/AppIcon.appiconset/icon_256.png /src/macos/Assets.xcassets/AppIcon.appiconset/icon_256.png
 COPY landing /src/landing
-RUN rm -rf /src/landing/src/pages/conceitos /src/landing/src/pages/heroes
 RUN cd /src/landing && npm run build
 
 FROM nginx:1.27-alpine

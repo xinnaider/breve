@@ -64,6 +64,4 @@ content/development.yaml
 /assets/style-ref.jpg
 /assets/petzinho-idle.png
 
-# Explorações locais de instalação
-landing/src/components/conceitos/InstallMockup.astro
-landing/src/pages/heroes/install/
+# Explorações locais ficam em reports/, fora das rotas e do repositório.

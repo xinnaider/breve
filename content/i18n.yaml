@@ -305,9 +305,6 @@ setup.update.progress_compile:
 setup.update.progress_apply:
   pt: Instalando e reabrindo…
   en: Installing and reopening…
-setup.update.brew:
-  pt: O cask do Homebrew ainda aponta para o zip antigo. O caminho suportado é compilar a tag publicada neste Mac (install.sh ou o ícone de atualização).
-  en: The Homebrew cask still points at the old zip. The supported path is compiling the published tag on this Mac (install.sh or the update icon).
 update.error.busy:
   pt: Já há uma atualização em andamento.
   en: An update is already running.

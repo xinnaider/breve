@@ -19,5 +19,3 @@ cd breve
 ```
 
 Para apenas compilar, use `./build.sh` e abra com `open app/Breve.app`.
-
-O cask e o ZIP da versão 1.0.2 usam o atualizador antigo. Reinstale pelo comando acima para migrar para o atualizador por compilação local. Não é necessário apagar suas preferências.

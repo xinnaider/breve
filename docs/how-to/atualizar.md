@@ -8,7 +8,7 @@ Após confirmar, o app baixa o código por HTTPS, confere a versão, compila nes
 
 A cópia anterior é mantida durante a troca e restaurada se a movimentação da nova cópia falhar. Isso não equivale a rollback automático de crashes depois da abertura. Preferências ficam fora do `.app` e são preservadas.
 
-Para reinstalar ou migrar do ZIP/Sparkle 1.0.2:
+Para reinstalar:
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/xinnaider/breve/main/install.sh | bash
@@ -16,4 +16,4 @@ curl -fsSL https://raw.githubusercontent.com/xinnaider/breve/main/install.sh | b
 
 O script em `main` instala a release publicada. Para instalar o código de um checkout revisado, use `./install.sh --local`.
 
-O feed `updates/appcast.xml` é legado: builds novos não usam Sparkle. Veja [como publicar uma release](../../updates/README.md).
+Veja [como publicar uma release](../../updates/README.md).

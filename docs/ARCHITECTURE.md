@@ -45,9 +45,8 @@ Session  -->  WidgetPanelController (NSPanel)
 
 - SO: macOS 14+. Accessory via `NSApp.setActivationPolicy(.accessory)`.
 - Persistência: `UserDefaults` chave `breve.config.v1`.
-- Dependências: Yams ≥ 6.2.2 (YAML). Sem Sparkle no app novo.
+- Dependências: Yams ≥ 6.2.2 (YAML).
 - Publicação do app: GitHub Release / tag `vX.Y.Z`. Push em `main` pode implantar a landing sem ser release do app.
-- Feed antigo: `updates/appcast.xml` só para clientes 1.0.2. Sem iCloud, sem extensão de sistema.
 
 ## Restrições e trade-offs
 

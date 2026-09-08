@@ -17,8 +17,6 @@ struct UserConfig: Codable, Equatable {
     }
 
     static let defaultsKey = "breve.config.v1"
-    static let legacyDefaultsKey = "petzinho.config.v1"
-    static let legacySuiteName = "dev.fordevs.petzinho"
 
     static var storage: UserDefaults {
         #if DEBUG
@@ -31,31 +29,7 @@ struct UserConfig: Codable, Equatable {
     }
 
     static func load(from defaults: UserDefaults = UserConfig.storage) -> UserConfig? {
-        let legacy: UserDefaults?
-        #if DEBUG
-        if DebugEnv.value("DEFAULTS_SUITE") != nil {
-            legacy = nil
-        } else {
-            legacy = UserDefaults(suiteName: legacySuiteName)
-        }
-        #else
-        legacy = UserDefaults(suiteName: legacySuiteName)
-        #endif
-        return load(from: defaults, legacy: legacy)
-    }
-
-    static func load(from defaults: UserDefaults, legacy: UserDefaults?) -> UserConfig? {
-        if let config = decode(defaults.data(forKey: defaultsKey)) {
-            return config
-        }
-        guard let legacy,
-              let config = decode(
-                legacy.data(forKey: legacyDefaultsKey) ?? legacy.data(forKey: defaultsKey)
-              ) else {
-            return nil
-        }
-        config.save(to: defaults)
-        return config
+        decode(defaults.data(forKey: defaultsKey))
     }
 
     func save(to defaults: UserDefaults = UserConfig.storage) {
@@ -87,9 +61,6 @@ enum DebugEnv {
         #if DEBUG
         let env = ProcessInfo.processInfo.environment
         if let value = env["BREVE_\(name)"], !value.isEmpty {
-            return value
-        }
-        if let value = env["PETZINHO_\(name)"], !value.isEmpty {
             return value
         }
         #endif

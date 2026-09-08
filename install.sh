@@ -125,32 +125,6 @@ print("TARBALL=" + shlex.quote(tarball))
 PY
 }
 
-install_bundle() {
-  local source="$1"
-  local dest="$2"
-  local parent stamp staging backup
-  parent="$(dirname "$dest")"
-  [[ -w "$parent" ]] || die "Sem permissão de escrita em $parent (sem sudo)."
-  stamp="$(date +%s)"
-  staging="${dest}.incoming.${stamp}"
-  backup="${dest}.backup.${stamp}"
-  rm -rf "$staging"
-  /usr/bin/ditto "$source" "$staging"
-  if [[ -e "$dest" ]]; then
-    mv "$dest" "$backup"
-  fi
-  if ! mv "$staging" "$dest"; then
-    if [[ -e "$backup" ]]; then
-      rm -rf "$dest" 2>/dev/null || true
-      mv "$backup" "$dest"
-    fi
-    die "Falha ao mover o app novo; destino restaurado se havia backup."
-  fi
-  rm -rf "$backup" 2>/dev/null || true
-  local lsreg="/System/Library/Frameworks/CoreServices.framework/Frameworks/LaunchServices.framework/Support/lsregister"
-  [[ -x "$lsreg" ]] && "$lsreg" -f "$dest" || true
-}
-
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --local) LOCAL=1; shift ;;
@@ -215,6 +189,7 @@ else
   [[ "$FOUND" == "$VERSION" ]] || die "MARKETING_VERSION ($FOUND) ≠ tag ($VERSION)."
 fi
 
+[[ -f "$ROOT/scripts/lib/install-app.sh" ]] || die "Release sem o helper de instalação."
 breve_ui_done "Código preparado."
 breve_ui_step 3 "Dar vida ao Breve" "Compilando neste Mac. Pode levar alguns minutos."
 BREVE_QUIET=1 "$ROOT/build.sh"
@@ -260,11 +235,7 @@ else:
     sys.exit("Breve ainda está encerrando. Instalação anterior preservada; tente novamente.")
 PY_STOP
 
-if [[ -f "$ROOT/scripts/lib/install-app.sh" ]]; then
-  /bin/bash "$ROOT/scripts/lib/install-app.sh" --source "$SRC_APP" --dest "$DEST_APP" >/dev/null
-else
-  install_bundle "$SRC_APP" "$DEST_APP"
-fi
+/bin/bash "$ROOT/scripts/lib/install-app.sh" --source "$SRC_APP" --dest "$DEST_APP" >/dev/null
 
 if [[ "$LOCAL" != 1 ]]; then
   rm -rf "$ROOT/app/Breve.app"
